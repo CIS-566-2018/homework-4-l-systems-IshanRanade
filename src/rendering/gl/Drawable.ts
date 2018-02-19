@@ -13,7 +13,7 @@ abstract class Drawable {
 
   abstract create() : void;
 
-  destroy() {
+  destory() {
     gl.deleteBuffer(this.bufIdx);
     gl.deleteBuffer(this.bufPos);
     gl.deleteBuffer(this.bufNor);
