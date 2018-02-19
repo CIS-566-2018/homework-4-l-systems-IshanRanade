@@ -27,20 +27,26 @@ class Plant extends Drawable {
     this.meshes = meshes;
   }
 
-  getCylinder(currentIndex: number, indices: number[], normals: number[], positions: number[], colors: number[]) {
+  getCylinder(currentIndex: number, indices: number[], normals: number[], positions: number[], colors: number[], trans: mat4) {
     let cylinderMesh: any = this.meshes['cylinder'];
 
     for(let i: number = 0; i < cylinderMesh.indices.length; ++i) {
+      let normal: vec4 = vec4.fromValues(cylinderMesh.vertexNormals[i * 3], cylinderMesh.vertexNormals[i * 3 + 1], cylinderMesh.vertexNormals[i * 3 + 2], 0);
+      let position: vec4 = vec4.fromValues(cylinderMesh.vertices[i * 3], cylinderMesh.vertices[i * 3 + 1], cylinderMesh.vertices[i * 3 + 2], 1);
+
+      vec4.transformMat4(normal, normal, trans);
+      vec4.transformMat4(position, position, trans);
+
       indices.push(currentIndex + cylinderMesh.indices[i]);
 
-      normals.push(cylinderMesh.vertexNormals[i * 3]);
-      normals.push(cylinderMesh.vertexNormals[i * 3 + 1]);
-      normals.push(cylinderMesh.vertexNormals[i * 3 + 2]);
+      normals.push(normal[0]);
+      normals.push(normal[1]);
+      normals.push(normal[2]);
       normals.push(0);
 
-      positions.push(cylinderMesh.vertices[i * 3]);
-      positions.push(cylinderMesh.vertices[i * 3 + 1]);
-      positions.push(cylinderMesh.vertices[i * 3 + 2]);
+      positions.push(position[0]);
+      positions.push(position[1]);
+      positions.push(position[2]);
       positions.push(1);
 
       colors.push(1);
@@ -48,7 +54,6 @@ class Plant extends Drawable {
       colors.push(0);
       colors.push(1);
     }
-
   }
 
   create() {
@@ -70,16 +75,21 @@ class Plant extends Drawable {
     //                                 0, 1, 0, 1,
     //                                 0, 1, 0, 1]);
 
-    let cylinderMesh: any = this.meshes['cylinder'];
+    let cylinderMeshSize = this.meshes['cylinder'].indices.length;
 
     let tempIndices: number[] = [];
     let tempNormals: number[] = [];
     let tempPositions: number[] = [];
     let tempColors: number[] = [];
 
-    console.log(tempIndices);
+    //console.log(tempIndices);
 
-    this.getCylinder(0, tempIndices, tempNormals, tempPositions, tempColors);
+    this.getCylinder(0, tempIndices, tempNormals, tempPositions, tempColors, mat4.create());
+
+    let trans: mat4 = mat4.create();
+    mat4.translate(trans, trans, vec3.fromValues(1,1,1));
+    this.getCylinder(cylinderMeshSize, tempIndices, tempNormals, tempPositions, tempColors, trans);
+
  
     this.indices   = new Uint32Array(tempIndices);
     this.normals   = new Float32Array(tempNormals);
