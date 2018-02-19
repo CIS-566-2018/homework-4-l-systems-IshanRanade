@@ -39,21 +39,48 @@ class Plant extends Drawable {
 
     let lSystemString: string = this.lSystem.generateLSystemString(2);
 
-    this.indices = new Uint32Array([0, 1, 2,
-                                    0, 2, 3]);
-    this.normals = new Float32Array([0, 0, 1, 0,
-                                    0, 0, 1, 0,
-                                    0, 0, 1, 0,
-                                    0, 0, 1, 0]);
-    this.positions = new Float32Array([-1, -1, 0, 1,
-                                    1, -1, 0, 1,
-                                    1, 1, 0, 1,
-                                    -1, 1, 0, 1]);
-    this.colors = new Float32Array([0, 1, 1, 1,
-                                    0, 1, 0, 1,
-                                    0, 1, 0, 1,
-                                    0, 1, 0, 1]);
+    // this.indices = new Uint32Array([0, 1, 2,
+    //                                 0, 2, 3]);
+    // this.normals = new Float32Array([0, 0, 1, 0,
+    //                                 0, 0, 1, 0,
+    //                                 0, 0, 1, 0,
+    //                                 0, 0, 1, 0]);
+    // this.positions = new Float32Array([-1, -1, 0, 1,
+    //                                 1, -1, 0, 1,
+    //                                 1, 1, 0, 1,
+    //                                 -1, 1, 0, 1]);
+    // this.colors = new Float32Array([0, 1, 1, 1,
+    //                                 0, 1, 0, 1,
+    //                                 0, 1, 0, 1,
+    //                                 0, 1, 0, 1]);
 
+    let cylinderMesh: any = this.meshes['cylinder'];
+ 
+    this.indices   = new Uint32Array(cylinderMesh.indices);
+    this.normals   = new Float32Array(cylinderMesh.indices.length * 4);
+    this.positions = new Float32Array(cylinderMesh.indices.length * 4);
+    this.colors    = new Float32Array(cylinderMesh.indices.length * 4);
+
+    console.log(cylinderMesh);
+
+    for(let i: number = 0; i < cylinderMesh.indices.length; ++i) {
+      this.normals[i * 4]     = cylinderMesh.vertexNormals[i * 3];
+      this.normals[i * 4 + 1] = cylinderMesh.vertexNormals[i * 3 + 1];
+      this.normals[i * 4 + 2] = cylinderMesh.vertexNormals[i * 3 + 2];
+      this.normals[i * 4 + 3] = 0;
+
+      this.positions[i * 4]     = cylinderMesh.vertices[i * 3];
+      this.positions[i * 4 + 1] = cylinderMesh.vertices[i * 3 + 1];
+      this.positions[i * 4 + 2] = cylinderMesh.vertices[i * 3 + 2];
+      this.positions[i * 4 + 3] = 1;
+
+      this.colors[i * 4]     = 1;
+      this.colors[i * 4 + 1] = 0;
+      this.colors[i * 4 + 2] = 0;
+      this.colors[i * 4 + 3] = 1;
+    }
+
+    console.log(this.normals);
 
     this.generateIdx();
     this.generatePos();
