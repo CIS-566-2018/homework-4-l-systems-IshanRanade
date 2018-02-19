@@ -18,6 +18,10 @@ module.exports = {
         test: /\.glsl$/,
         loader: 'webpack-glsl-loader'
       },
+      {
+        test: /\.obj$/,
+        use: 'raw-loader'
+      }
     ]
   },
   resolve: {

@@ -10,6 +10,17 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 import LSystem from './LSystem'
 import Plant from './Plant'
 
+var OBJ = require('webgl-obj-loader');
+var meshes: any;
+window.onload = function() {
+  OBJ.downloadMeshes({
+    'cylinder': 'src/objs/cylinder.obj'
+  }, function(m: any) {
+    meshes = m;
+    main();
+  });
+}
+
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
@@ -27,7 +38,7 @@ function loadScene() {
   // icosphere.create();
   // square = new Square(vec3.fromValues(0, 0, 0));
   // square.create();
-  plant = new Plant(vec3.fromValues(0,0,0));
+  plant = new Plant(vec3.fromValues(0,0,0), meshes);
   plant.create();
 }
 
@@ -99,4 +110,4 @@ function main() {
   tick();
 }
 
-main();
+//main();
