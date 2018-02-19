@@ -1,16 +1,8 @@
-import {vec3, vec4} from 'gl-matrix';
+import {vec3, vec4, mat4, mat3} from 'gl-matrix';
 import Drawable from './rendering/gl/Drawable';
 import {gl} from './globals';
 import LSystem from './LSystem';
 
-
-//var loader = require('raw-loader');
-//import cylinderMeshPath from './objs/cylinder.obj';
-//import cylinder from './objs/cylinder.obj';s
-
-//import txt from 'raw-loader!./objs/cylinder.obj';
-
-//var fs = require('fs');
 var OBJ = require('webgl-obj-loader');
 
 class Plant extends Drawable {
@@ -35,6 +27,30 @@ class Plant extends Drawable {
     this.meshes = meshes;
   }
 
+  getCylinder(currentIndex: number, indices: number[], normals: number[], positions: number[], colors: number[]) {
+    let cylinderMesh: any = this.meshes['cylinder'];
+
+    for(let i: number = 0; i < cylinderMesh.indices.length; ++i) {
+      indices.push(currentIndex + cylinderMesh.indices[i]);
+
+      normals.push(cylinderMesh.vertexNormals[i * 3]);
+      normals.push(cylinderMesh.vertexNormals[i * 3 + 1]);
+      normals.push(cylinderMesh.vertexNormals[i * 3 + 2]);
+      normals.push(0);
+
+      positions.push(cylinderMesh.vertices[i * 3]);
+      positions.push(cylinderMesh.vertices[i * 3 + 1]);
+      positions.push(cylinderMesh.vertices[i * 3 + 2]);
+      positions.push(1);
+
+      colors.push(1);
+      colors.push(0);
+      colors.push(0);
+      colors.push(1);
+    }
+
+  }
+
   create() {
 
     let lSystemString: string = this.lSystem.generateLSystemString(2);
@@ -55,32 +71,20 @@ class Plant extends Drawable {
     //                                 0, 1, 0, 1]);
 
     let cylinderMesh: any = this.meshes['cylinder'];
+
+    let tempIndices: number[] = [];
+    let tempNormals: number[] = [];
+    let tempPositions: number[] = [];
+    let tempColors: number[] = [];
+
+    console.log(tempIndices);
+
+    this.getCylinder(0, tempIndices, tempNormals, tempPositions, tempColors);
  
-    this.indices   = new Uint32Array(cylinderMesh.indices);
-    this.normals   = new Float32Array(cylinderMesh.indices.length * 4);
-    this.positions = new Float32Array(cylinderMesh.indices.length * 4);
-    this.colors    = new Float32Array(cylinderMesh.indices.length * 4);
-
-    console.log(cylinderMesh);
-
-    for(let i: number = 0; i < cylinderMesh.indices.length; ++i) {
-      this.normals[i * 4]     = cylinderMesh.vertexNormals[i * 3];
-      this.normals[i * 4 + 1] = cylinderMesh.vertexNormals[i * 3 + 1];
-      this.normals[i * 4 + 2] = cylinderMesh.vertexNormals[i * 3 + 2];
-      this.normals[i * 4 + 3] = 0;
-
-      this.positions[i * 4]     = cylinderMesh.vertices[i * 3];
-      this.positions[i * 4 + 1] = cylinderMesh.vertices[i * 3 + 1];
-      this.positions[i * 4 + 2] = cylinderMesh.vertices[i * 3 + 2];
-      this.positions[i * 4 + 3] = 1;
-
-      this.colors[i * 4]     = 1;
-      this.colors[i * 4 + 1] = 0;
-      this.colors[i * 4 + 2] = 0;
-      this.colors[i * 4 + 3] = 1;
-    }
-
-    console.log(this.normals);
+    this.indices   = new Uint32Array(tempIndices);
+    this.normals   = new Float32Array(tempNormals);
+    this.positions = new Float32Array(tempPositions);
+    this.colors    = new Float32Array(tempColors);
 
     this.generateIdx();
     this.generatePos();
