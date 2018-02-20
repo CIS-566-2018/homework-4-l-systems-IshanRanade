@@ -21,7 +21,7 @@ class Plant extends Drawable {
 
     let axiom: string = "FX";
     let grammar : { [key:string]:string; } = {};
-    grammar["X"] = "[F+X]";
+    grammar["X"] = "[F+X]F";
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
   }
@@ -59,8 +59,8 @@ class Plant extends Drawable {
 
   create() {
 
-    //let lSystemString: string = this.lSystem.generateLSystemString(2);
-    let lSystemString: string = "FFF";
+    //let lSystemString: string = this.lSystem.generateLSystemString(3);
+    let lSystemString: string = "F[F[F]F]FF";
 
     console.log(lSystemString);
 
@@ -95,11 +95,23 @@ class Plant extends Drawable {
       let c: string = lSystemString[i];
 
       if(c == "F") {
-        turtle.rotate(vec3.fromValues(0,0,1), 25);
+        turtle.rotate(vec3.fromValues(0,0,1),  Math.random() * 30 + 10);
         this.addCylinder(currentIndex, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix());
         turtle.move();
         currentIndex += cylinderMeshSize;
+      } else if(c == "[") {
+        turtles.push(turtle.copy());
+
+        turtles.forEach(function(value) {
+          console.log(value.position);
+        });
+        console.log("hello");
+      } else if(c == "]") {
+        turtle = turtles.pop();
       }
+
+      //console.log(turtle.position);
+      //console.log(turtles.length);
     }
 
     this.indices   = new Uint32Array(tempIndices);

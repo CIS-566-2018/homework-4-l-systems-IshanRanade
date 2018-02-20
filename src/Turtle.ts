@@ -40,7 +40,16 @@ class Turtle {
   }
 
   copy() {
-    let newTurtle: Turtle = new Turtle(this.position, this.rotation, this.aim, this.scale, this.height);
+    let newPosition: vec3 = vec3.create();
+    vec3.copy(newPosition, this.position);
+    let newRotation: mat4 = mat4.create();
+    mat4.copy(newRotation, this.rotation);
+    let newAim: vec3 = vec3.create();
+    vec3.copy(newAim, this.aim);
+    let newScale: vec3 = vec3.create();
+    vec3.copy(newScale, this.scale);
+
+    let newTurtle: Turtle = new Turtle(newPosition, newRotation, newAim, newScale, this.height);
     return newTurtle;
   }
 }
