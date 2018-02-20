@@ -21,7 +21,7 @@ class Plant extends Drawable {
 
     let axiom: string = "FX";
     let grammar : { [key:string]:string; } = {};
-    grammar["X"] = "[F+X]FXX[-FXX]";
+    grammar["X"] = "[F+X]FX[-FX][+F-+XF]";
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
   }
@@ -64,7 +64,7 @@ class Plant extends Drawable {
 
   create() {
 
-    let lSystemString: string = this.lSystem.generateLSystemString(5);
+    let lSystemString: string = this.lSystem.generateLSystemString(6);
     //let lSystemString: string = "F[F[F]F]FF";
 
     console.log(lSystemString);
