@@ -72,7 +72,7 @@ function main() {
   const camera = new Camera(vec3.fromValues(0, 0, 5), vec3.fromValues(0, 0, 0));
 
   const renderer = new OpenGLRenderer(canvas);
-  renderer.setClearColor(0.2, 0.2, 0.2, 1);
+  renderer.setClearColor(0.8, 0.8, 0.8, 1);
   gl.enable(gl.DEPTH_TEST);
 
   const lambert = new ShaderProgram([
