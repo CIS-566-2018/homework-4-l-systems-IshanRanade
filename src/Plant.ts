@@ -60,7 +60,7 @@ class Plant extends Drawable {
   create() {
 
     //let lSystemString: string = this.lSystem.generateLSystemString(2);
-    let lSystemString: string = "FF";
+    let lSystemString: string = "FFF";
 
     console.log(lSystemString);
 
@@ -87,19 +87,21 @@ class Plant extends Drawable {
     let currentIndex: number = 0;
 
     let turtles: Turtle[] = [];
-    turtles[0] = new Turtle(vec3.fromValues(0,0,0), mat4.create(), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025));
+    turtles.push(new Turtle(vec3.fromValues(0,0,0), mat4.create(), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025), originalCylinderHeight));
 
     let turtle: Turtle = turtles[0];
+    let prevTurtle: Turtle = turtle;
 
     for(let i: number = 0; i < lSystemString.length; ++i) {
       let c: string = lSystemString[i];
 
       if(c == "F") {
-        let moveVector: vec3 = turtle.aim;
-        vec3.scale(moveVector, turtle.aim, 1);
-        vec3.add(turtle.position, turtle.position, moveVector);
+        turtle.rotate(vec3.fromValues(0,0,1), 25);
+        turtle.move(prevTurtle);
 
         currentIndex += cylinderMeshSize;
+
+        prevTurtle = turtle;
       }
 
       this.addCylinder(currentIndex - cylinderMeshSize, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix());
