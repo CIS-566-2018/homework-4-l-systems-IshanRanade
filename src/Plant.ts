@@ -2,8 +2,7 @@ import {vec3, vec4, mat4, mat3} from 'gl-matrix';
 import Drawable from './rendering/gl/Drawable';
 import {gl} from './globals';
 import LSystem from './LSystem';
-
-var OBJ = require('webgl-obj-loader');
+import Turtle from './Turtle';
 
 class Plant extends Drawable {
   indices: Uint32Array;
@@ -27,7 +26,7 @@ class Plant extends Drawable {
     this.meshes = meshes;
   }
 
-  getCylinder(currentIndex: number, indices: number[], normals: number[], positions: number[], colors: number[], trans: mat4, modelMatrix: mat4) {
+  addCylinder(currentIndex: number, indices: number[], normals: number[], positions: number[], colors: number[], trans: mat4) {
     let cylinderMesh: any = this.meshes['cylinder'];
 
     for(let i: number = 0; i < cylinderMesh.indices.length; ++i) {
@@ -35,9 +34,9 @@ class Plant extends Drawable {
       let position: vec4 = vec4.fromValues(cylinderMesh.vertices[i * 3], cylinderMesh.vertices[i * 3 + 1], cylinderMesh.vertices[i * 3 + 2], 1);
 
       vec4.transformMat4(normal, normal, trans);
-      vec4.transformMat4(normal, normal, modelMatrix);
+      //vec4.transformMat4(normal, normal, modelMatrix);
       vec4.transformMat4(position, position, trans);
-      vec4.transformMat4(position, position, modelMatrix);
+      //vec4.transformMat4(position, position, modelMatrix);
 
       indices.push(currentIndex + cylinderMesh.indices[i]);
 
@@ -60,23 +59,51 @@ class Plant extends Drawable {
 
   create() {
 
-    let lSystemString: string = this.lSystem.generateLSystemString(2);
+    //let lSystemString: string = this.lSystem.generateLSystemString(2);
+    let lSystemString: string = "FF";
+
+    console.log(lSystemString);
 
     let cylinderMeshSize = this.meshes['cylinder'].indices.length;
+
+    let minY: number =  1000000000000;
+    let maxY: number = -1000000000000;
+    for(let i: number = 0; i < this.meshes['cylinder'].vertices.length;  i+=3) {
+      if(this.meshes['cylinder'].vertices[i+1] < minY) {
+        minY = this.meshes['cylinder'].vertices[i+1];
+      }
+
+      if(this.meshes['cylinder'].vertices[i+1] > maxY) {
+        maxY = this.meshes['cylinder'].vertices[i+1];
+      }
+    }
+    let originalCylinderHeight = maxY - minY;
 
     let tempIndices: number[] = [];
     let tempNormals: number[] = [];
     let tempPositions: number[] = [];
     let tempColors: number[] = [];
 
-    let modelMatrix: mat4 = mat4.create();
-    mat4.scale(modelMatrix, modelMatrix, vec3.fromValues(0.025,0.25,0.025));
+    let currentIndex: number = 0;
 
-    let trans: mat4 = mat4.create();
-    mat4.translate(trans, trans, vec3.fromValues(0,0,0));
+    let turtles: Turtle[] = [];
+    turtles[0] = new Turtle(vec3.fromValues(0,0,0), mat4.create(), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025));
 
-    this.getCylinder(0, tempIndices, tempNormals, tempPositions, tempColors, mat4.create(), modelMatrix);
-    this.getCylinder(cylinderMeshSize, tempIndices, tempNormals, tempPositions, tempColors, trans, modelMatrix);
+    let turtle: Turtle = turtles[0];
+
+    for(let i: number = 0; i < lSystemString.length; ++i) {
+      let c: string = lSystemString[i];
+
+      if(c == "F") {
+        let moveVector: vec3 = turtle.aim;
+        vec3.scale(moveVector, turtle.aim, 1);
+        vec3.add(turtle.position, turtle.position, moveVector);
+
+        currentIndex += cylinderMeshSize;
+      }
+
+      this.addCylinder(currentIndex - cylinderMeshSize, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix());
+    }
 
     this.indices   = new Uint32Array(tempIndices);
     this.normals   = new Float32Array(tempNormals);
@@ -100,8 +127,6 @@ class Plant extends Drawable {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufCol);
     gl.bufferData(gl.ARRAY_BUFFER, this.colors, gl.STATIC_DRAW);
-
-    console.log(`Created square`);
   }
 };
 
