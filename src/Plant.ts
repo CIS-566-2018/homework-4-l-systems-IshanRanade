@@ -95,20 +95,11 @@ class Plant extends Drawable {
       let c: string = lSystemString[i];
 
       if(c == "F") {
-
         turtle.rotate(vec3.fromValues(0,0,1), 25);
         this.addCylinder(currentIndex, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix());
         turtle.move();
-
         currentIndex += cylinderMeshSize;
-
-        
-
-        console.log(turtle);
-        //console.log(prevTurtle);
-        console.log();
       }
-
     }
 
     this.indices   = new Uint32Array(tempIndices);
