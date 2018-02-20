@@ -21,7 +21,7 @@ class Plant extends Drawable {
 
     let axiom: string = "FX";
     let grammar : { [key:string]:string; } = {};
-    grammar["X"] = "[F+X]F";
+    grammar["X"] = "[F+X]FXX";
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
   }
@@ -59,8 +59,8 @@ class Plant extends Drawable {
 
   create() {
 
-    //let lSystemString: string = this.lSystem.generateLSystemString(3);
-    let lSystemString: string = "F[F[F]F]FF";
+    let lSystemString: string = this.lSystem.generateLSystemString(3);
+    //let lSystemString: string = "F[F[F]F]FF";
 
     console.log(lSystemString);
 
@@ -101,17 +101,23 @@ class Plant extends Drawable {
         currentIndex += cylinderMeshSize;
       } else if(c == "[") {
         turtles.push(turtle.copy());
-
-        turtles.forEach(function(value) {
-          console.log(value.position);
-        });
-        console.log("hello");
       } else if(c == "]") {
         turtle = turtles.pop();
-      }
+      } else if(c == "+") {
+        let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
+        vec4.transformMat4(tempAim, tempAim, turtle.rotation);
+        let tan: vec4 = vec4.fromValues(1,0,0,0);
+        vec4.transformMat4(tan, tan, turtle.rotation);
+        let bit: vec4 = vec4.fromValues(0,0,1,0);
+        vec4.transformMat4(bit, bit, turtle.rotation);
 
-      //console.log(turtle.position);
-      //console.log(turtles.length);
+        turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), Math.random() * 30 + 20);
+        turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), Math.random() * 30 + 10);
+        console.log(bit);
+        console.log(tan);
+      } else if(c == "-") {
+
+      }
     }
 
     this.indices   = new Uint32Array(tempIndices);
