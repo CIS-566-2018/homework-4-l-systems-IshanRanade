@@ -29,14 +29,19 @@ class Turtle {
     mat4.rotate(this.rotation, this.rotation, angle * 3.14159265 / 180.0, axis);
   }
 
-  move(prevTurtle: Turtle) {
-    let tempAim: vec4 = vec4.fromValues(prevTurtle.aim[0], prevTurtle.aim[1], prevTurtle.aim[2], 0);
+  move() {
+    let tempAim: vec4 = vec4.fromValues(this.aim[0], this.aim[1], this.aim[2], 0);
     vec4.normalize(tempAim, tempAim);
-    vec4.scale(tempAim, tempAim, prevTurtle.height * prevTurtle.scale[1]);
-    vec4.transformMat4(tempAim, tempAim, prevTurtle.rotation);
+    vec4.scale(tempAim, tempAim, this.height * this.scale[1]);
+    vec4.transformMat4(tempAim, tempAim, this.rotation);
     
     
     vec3.add(this.position, this.position, vec3.fromValues(tempAim[0], tempAim[1], tempAim[2]));
+  }
+
+  copy() {
+    let newTurtle: Turtle = new Turtle(this.position, this.rotation, this.aim, this.scale, this.height);
+    return newTurtle;
   }
 }
 

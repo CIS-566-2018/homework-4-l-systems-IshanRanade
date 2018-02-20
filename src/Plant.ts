@@ -90,21 +90,25 @@ class Plant extends Drawable {
     turtles.push(new Turtle(vec3.fromValues(0,0,0), mat4.create(), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025), originalCylinderHeight));
 
     let turtle: Turtle = turtles[0];
-    let prevTurtle: Turtle = turtle;
 
     for(let i: number = 0; i < lSystemString.length; ++i) {
       let c: string = lSystemString[i];
 
       if(c == "F") {
+
         turtle.rotate(vec3.fromValues(0,0,1), 25);
-        turtle.move(prevTurtle);
+        this.addCylinder(currentIndex, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix());
+        turtle.move();
 
         currentIndex += cylinderMeshSize;
 
-        prevTurtle = turtle;
+        
+
+        console.log(turtle);
+        //console.log(prevTurtle);
+        console.log();
       }
 
-      this.addCylinder(currentIndex - cylinderMeshSize, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix());
     }
 
     this.indices   = new Uint32Array(tempIndices);
