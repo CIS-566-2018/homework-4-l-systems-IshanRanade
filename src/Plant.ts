@@ -64,8 +64,8 @@ class Plant extends Drawable {
 
   create() {
 
-    let lSystemString: string = this.lSystem.generateLSystemString(6);
-    //let lSystemString: string = "F[F[F]F]FF";
+    //let lSystemString: string = this.lSystem.generateLSystemString(2);
+    let lSystemString: string = "FFFFF";
 
     console.log(lSystemString);
 
@@ -97,20 +97,42 @@ class Plant extends Drawable {
     this.addCylinder(currentIndex, tempIndices, tempNormals, tempPositions, tempColors, baseTrans, vec4.fromValues(239/255.0, 231/255.0, 215/255.0,1));
     currentIndex += cylinderMeshSize;
 
-
     let turtles: Turtle[] = [];
-    turtles.push(new Turtle(vec3.fromValues(0,0,0), mat4.create(), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025), originalCylinderHeight));
+    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025), originalCylinderHeight, vec3.fromValues(0,1,0)));
 
     let turtle: Turtle = turtles[0];
+
+    console.log(turtle.position);
 
     for(let i: number = 0; i < lSystemString.length; ++i) {
       let c: string = lSystemString[i];
 
+      //console.log(turtle.aim);
+      
+
       if(c == "F") {
-        turtle.rotate(vec3.fromValues(0,0,1),  (Math.random() - 0.5) * 30);
-        turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() - 0.5) * 30);
+        turtle.rotate(vec3.fromValues(0,0,1), 10);
+        //console.log(turtle.aim);
+        //turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() - 0.5) * 30);
+
+        // let tempAim: vec4 = vec4.create();
+        // vec4.transformMat4(tempAim, tempAim, turtle.rotation);
+
+        // if(tempAim[1] < 0 && turtle.height > 0.1) {
+        //   turtle.aim = vec3.fromValues(turtle.aim[0],-turtle.aim[1],turtle.aim[2]);
+
+        //   let tan: vec4 = vec4.fromValues(1,0,0,0);
+        //   vec4.transformMat4(tan, tan, turtle.rotation);
+        //   let bit: vec4 = vec4.fromValues(0,0,1,0);
+        //   vec4.transformMat4(bit, bit, turtle.rotation);
+
+        //   turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]),  (Math.random()) * -30);
+        //   //turtle.rotate(vec3.fromValues(0,0,1),  (Math.random()) * -30);
+        // }
+
         this.addCylinder(currentIndex, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix(), vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1));
         turtle.move();
+        console.log(turtle.position);
         currentIndex += cylinderMeshSize;
       } else if(c == "[") {
         turtles.push(turtle.copy());
@@ -119,25 +141,25 @@ class Plant extends Drawable {
         turtle = turtles.pop();
         turtle.rotate(vec3.fromValues(0,0,1),  (Math.random() - 0.5) * 90);
       } else if(c == "+") {
-        let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
-        vec4.transformMat4(tempAim, tempAim, turtle.rotation);
-        let tan: vec4 = vec4.fromValues(1,0,0,0);
-        vec4.transformMat4(tan, tan, turtle.rotation);
-        let bit: vec4 = vec4.fromValues(0,0,1,0);
-        vec4.transformMat4(bit, bit, turtle.rotation);
+        // let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
+        // vec4.transformMat4(tempAim, tempAim, turtle.rotation);
+        // let tan: vec4 = vec4.fromValues(1,0,0,0);
+        // vec4.transformMat4(tan, tan, turtle.rotation);
+        // let bit: vec4 = vec4.fromValues(0,0,1,0);
+        // vec4.transformMat4(bit, bit, turtle.rotation);
 
-        turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 30);
-        turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 30);
+        // turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 30);
+        // turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 30);
       } else if(c == "-") {
-        let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
-        vec4.transformMat4(tempAim, tempAim, turtle.rotation);
-        let tan: vec4 = vec4.fromValues(1,0,0,0);
-        vec4.transformMat4(tan, tan, turtle.rotation);
-        let bit: vec4 = vec4.fromValues(0,0,1,0);
-        vec4.transformMat4(bit, bit, turtle.rotation);
+        // let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
+        // vec4.transformMat4(tempAim, tempAim, turtle.rotation);
+        // let tan: vec4 = vec4.fromValues(1,0,0,0);
+        // vec4.transformMat4(tan, tan, turtle.rotation);
+        // let bit: vec4 = vec4.fromValues(0,0,1,0);
+        // vec4.transformMat4(bit, bit, turtle.rotation);
 
-        turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 360);
-        turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 360);
+        // turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 360);
+        // turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 360);
       }
     }
 
