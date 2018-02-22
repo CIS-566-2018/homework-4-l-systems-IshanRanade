@@ -64,8 +64,8 @@ class Plant extends Drawable {
 
   create() {
 
-    //let lSystemString: string = this.lSystem.generateLSystemString(2);
-    let lSystemString: string = "FFFFF";
+    let lSystemString: string = this.lSystem.generateLSystemString(5);
+    //let lSystemString: string = "FFFFF";
 
     console.log(lSystemString);
 
@@ -107,28 +107,13 @@ class Plant extends Drawable {
     for(let i: number = 0; i < lSystemString.length; ++i) {
       let c: string = lSystemString[i];
 
-      //console.log(turtle.aim);
-      
-
       if(c == "F") {
-        turtle.rotate(vec3.fromValues(0,0,1), 10);
-        //console.log(turtle.aim);
-        //turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() - 0.5) * 30);
+        turtle.rotate(vec3.fromValues(0,0,1), (Math.random() - 0.5) * 30);
+        turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() - 0.5) * 30);
 
-        // let tempAim: vec4 = vec4.create();
-        // vec4.transformMat4(tempAim, tempAim, turtle.rotation);
-
-        // if(tempAim[1] < 0 && turtle.height > 0.1) {
-        //   turtle.aim = vec3.fromValues(turtle.aim[0],-turtle.aim[1],turtle.aim[2]);
-
-        //   let tan: vec4 = vec4.fromValues(1,0,0,0);
-        //   vec4.transformMat4(tan, tan, turtle.rotation);
-        //   let bit: vec4 = vec4.fromValues(0,0,1,0);
-        //   vec4.transformMat4(bit, bit, turtle.rotation);
-
-        //   turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]),  (Math.random()) * -30);
-        //   //turtle.rotate(vec3.fromValues(0,0,1),  (Math.random()) * -30);
-        // }
+        if(turtle.aim[1] < 0) {
+          turtle.aim[1] = -turtle.aim[1];
+        }
 
         this.addCylinder(currentIndex, tempIndices, tempNormals, tempPositions, tempColors, turtle.getTransMatrix(), vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1));
         turtle.move();
@@ -141,25 +126,27 @@ class Plant extends Drawable {
         turtle = turtles.pop();
         turtle.rotate(vec3.fromValues(0,0,1),  (Math.random() - 0.5) * 90);
       } else if(c == "+") {
-        // let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
-        // vec4.transformMat4(tempAim, tempAim, turtle.rotation);
-        // let tan: vec4 = vec4.fromValues(1,0,0,0);
-        // vec4.transformMat4(tan, tan, turtle.rotation);
-        // let bit: vec4 = vec4.fromValues(0,0,1,0);
-        // vec4.transformMat4(bit, bit, turtle.rotation);
+        let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
 
-        // turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 30);
-        // turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 30);
+        let tan: vec4 = vec4.fromValues(1,0,0,0);
+        vec4.transformMat4(tan, tan, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(tan[0], tan[1], tan[2]), turtle.up));
+
+        let bit: vec4 = vec4.fromValues(0,0,1,0);
+        vec4.transformMat4(bit, bit, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(bit[0], bit[1], bit[2]), turtle.up));
+
+        turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 30);
+        turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 30);
       } else if(c == "-") {
-        // let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
-        // vec4.transformMat4(tempAim, tempAim, turtle.rotation);
-        // let tan: vec4 = vec4.fromValues(1,0,0,0);
-        // vec4.transformMat4(tan, tan, turtle.rotation);
-        // let bit: vec4 = vec4.fromValues(0,0,1,0);
-        // vec4.transformMat4(bit, bit, turtle.rotation);
+        let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
 
-        // turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 360);
-        // turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 360);
+        let tan: vec4 = vec4.fromValues(1,0,0,0);
+        vec4.transformMat4(tan, tan, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(tan[0], tan[1], tan[2]), turtle.up));
+
+        let bit: vec4 = vec4.fromValues(0,0,1,0);
+        vec4.transformMat4(bit, bit, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(bit[0], bit[1], bit[2]), turtle.up));
+
+        turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 360);
+        turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 360);
       }
     }
 
