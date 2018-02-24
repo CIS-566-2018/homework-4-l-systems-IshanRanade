@@ -36,6 +36,38 @@ out vec4 fs_Col;            // The color of each vertex. This is implicitly pass
 const vec4 lightPos = vec4(5, 5, 3, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
 
+mat4 getRotation() {
+  float qx = vs_Quaternion[0];
+  float qy = vs_Quaternion[1];
+  float qz = vs_Quaternion[2];
+  float qw = vs_Quaternion[3];
+  mat4 result;
+
+  result[0] = vec4(1.f - 2.f*qy*qy - 2.f*qz*qz, 2.f*qx*qy + 2.f*qz*qw, 2.f*qx*qz - 2.f*qy*qw, 0.f);
+  result[1] = vec4(2.f*qx*qy - 2.f*qz*qw, 1.f - 2.f*qx*qx - 2.f*qz*qz, 2.f*qy*qz + 2.f*qx*qw, 0.f);
+  result[2] = vec4(2.f*qx*qz + 2.f*qy*qw, 2.f*qy*qz - 2.f*qx*qw, 1.f - 2.f*qx*qx - 2.f*qy*qy, 0.f);
+  result[3] = vec4(0.f, 0.f, 0.f, 1.f);
+  return result;
+}
+
+mat4 getTranslation() {
+  mat4 result;
+  result[0] = vec4(1.f,0.f,0.f,0.f);
+  result[1] = vec4(0.f,1.f,0.f,0.f);
+  result[2] = vec4(0.f,0.f,1.f,0.f);
+  result[3] = vec4(vs_Translation[0], vs_Translation[1], vs_Translation[2], 1.f);
+  return result;
+}
+
+mat4 getScale() {
+  mat4 result;
+  result[0] = vec4(vs_Scale[0],0.f,0.f,0.f);
+  result[1] = vec4(0.f,vs_Scale[1],0.f,0.f);
+  result[2] = vec4(0.f,0.f,vs_Scale[2],0.f);
+  result[3] = vec4(0.f,0.f,0.f,1.f);
+  return result;
+}
+
 void main()
 {
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
@@ -49,8 +81,25 @@ void main()
 
 
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    modelposition[3] = 1.f;
+    modelposition = getTranslation() * getRotation() * getScale() * modelposition;
+    modelposition[3] = 1.f;
+    //modelposition = getScale() * getRotation() * getTranslation() * modelposition;
 
-    modelposition += vs_Translation;
+    //modelposition = vec4(modelposition[0] * vs_Scale[0], modelposition[1] * vs_Scale[1], modelposition[2] * vs_Scale[2], 1);
+
+    //modelposition += vs_Translation;
+    // vec3 newPos = vec3(vs_Translation);
+    //vec3 oldPos = vec3(modelposition);
+    //vec3 u = vec3(vs_Quaternion);
+    //float s = vs_Quaternion[3];
+    //vec3 newPos = 2.0f * dot(u, oldPos) * u + (s * s - dot(u, u)) * oldPos + 2.0f * s * cross(u, oldPos);
+
+    //modelposition = vec4(newPos, 1);
+
+
+    //modelposition += vs_Translation;
+    //modelposition[3] = 1.f;
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 

@@ -15,7 +15,7 @@ var OBJ = require('webgl-obj-loader');
 var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
-    'bark': 'src/objs/cylinder.obj',
+    'bark': 'src/objs/cylinder2.obj',
     'leaf': 'src/objs/leaf.obj'
   }, function(m: any) {
     meshes = m;
