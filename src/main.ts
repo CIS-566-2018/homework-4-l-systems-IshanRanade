@@ -39,13 +39,14 @@ function loadScene() {
   plant = new Plant(vec3.fromValues(0,0,0), meshes);
   plant.createTree();
 
-  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "leaf", vec4.fromValues(0,0,0,1));
+  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "leaf", vec4.fromValues(1,1,0,1));
   leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
   leaf.create();
 
   bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1));
   bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
   bark.create();
+  //console.log(plant.leafInstanceCount);
 }
 
 function main() {
@@ -93,7 +94,7 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
     renderer.render(camera, lambert, [
-       //leaf,
+       leaf,
        bark
       //square
     ]);

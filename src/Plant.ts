@@ -84,6 +84,13 @@ class Plant {
         this.scalesBark.push(turtle.scale[0], turtle.scale[1], turtle.scale[2], 1);
         this.barkInstanceCount += 1
 
+        if(turtle.scale[1] < 0.25) {
+          this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
+          this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
+          this.scalesLeaf.push(0.1,0.1,0.1,1);
+          this.leafInstanceCount += 1;
+        }
+
         turtle.move();
       } else if(c == "[") {
         turtles.push(turtle.copy());
@@ -92,27 +99,15 @@ class Plant {
         turtle = turtles.pop();
         turtle.rotate(vec3.fromValues(0,0,1),  (Math.random() - 0.5) * 90);
       } else if(c == "+") {
-        // let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
-
-        // let tan: vec4 = vec4.fromValues(1,0,0,0);
-        // vec4.transformMat4(tan, tan, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(tan[0], tan[1], tan[2]), turtle.up));
-
-        // let bit: vec4 = vec4.fromValues(0,0,1,0);
-        // vec4.transformMat4(bit, bit, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(bit[0], bit[1], bit[2]), turtle.up));
-
-        // turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 30);
-        // turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 30);
+        let tan: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(1,0,0));
+        let bit: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(0,0,1));
+        turtle.rotate(tan, (Math.random() - 0.5) * 30);
+        turtle.rotate(bit, (Math.random() - 0.5) * 30);
       } else if(c == "-") {
-        // let tempAim: vec4 = vec4.fromValues(turtle.aim[0], turtle.aim[1], turtle.aim[2], 0);
-
-        // let tan: vec4 = vec4.fromValues(1,0,0,0);
-        // vec4.transformMat4(tan, tan, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(tan[0], tan[1], tan[2]), turtle.up));
-
-        // let bit: vec4 = vec4.fromValues(0,0,1,0);
-        // vec4.transformMat4(bit, bit, turtle.getRotationMatrixFromDirectionVector(vec3.fromValues(bit[0], bit[1], bit[2]), turtle.up));
-
-        // turtle.rotate(vec3.fromValues(tan[0], tan[1], tan[2]), (Math.random() - 0.5) * 360);
-        // turtle.rotate(vec3.fromValues(bit[0], bit[1], bit[2]), (Math.random() - 0.5) * 360);
+        let tan: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(1,0,0));
+        let bit: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(0,0,1));
+        turtle.rotate(tan, (Math.random() - 0.5) * 360);
+        turtle.rotate(bit, (Math.random() - 0.5) * 360);
       }
     }
   }

@@ -22,6 +22,12 @@ class Turtle {
   toRadians(angle: number) {
     return Math.PI * angle / 180.0;
   }
+
+  rotateVectorByQuat(v: vec3) {
+    let result: vec3 = vec3.create();
+    vec3.transformQuat(result, v, this.quaternion);
+    return result;
+  }
   
   rotate(axis: vec3, angle: number) {
     vec3.normalize(axis, axis);
