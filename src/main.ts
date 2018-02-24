@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix';
+import {vec3,vec4} from 'gl-matrix';
 import * as Stats from 'stats-js';
 import * as DAT from 'dat-gui';
 import Icosphere from './geometry/Icosphere';
@@ -9,12 +9,14 @@ import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 import LSystem from './LSystem'
 import Plant from './Plant'
+import PlantPart from './PlantPart'
 
 var OBJ = require('webgl-obj-loader');
 var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
-    'cylinder': 'src/objs/cylinder.obj'
+    'bark': 'src/objs/cylinder.obj',
+    'leaf': 'src/objs/leaf.obj'
   }, function(m: any) {
     meshes = m;
     main();
@@ -28,18 +30,22 @@ const controls = {
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
-// let icosphere: Icosphere;
-// let square: Square;
-
 let plant: Plant;
 
+let bark: PlantPart;
+let leaf: PlantPart;
+
 function loadScene() {
-  // icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
-  // icosphere.create();
-  // square = new Square(vec3.fromValues(0, 0, 0));
-  // square.create();
   plant = new Plant(vec3.fromValues(0,0,0), meshes);
-  plant.create();
+  plant.createTree();
+
+  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "leaf", vec4.fromValues(0,0,0,1));
+  leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
+  leaf.create();
+
+  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(0,0,0,1));
+  bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
+  bark.create();
 }
 
 function main() {
@@ -87,8 +93,9 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
     renderer.render(camera, lambert, [
-      // icosphere,
-      plant
+       //leaf,
+       bark
+      //square
     ]);
     stats.end();
 
@@ -109,5 +116,3 @@ function main() {
   // Start the render loop
   tick();
 }
-
-//main();

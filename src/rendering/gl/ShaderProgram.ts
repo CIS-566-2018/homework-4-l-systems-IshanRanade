@@ -25,6 +25,10 @@ class ShaderProgram {
   attrNor: number;
   attrCol: number;
 
+  attrTranslation: number;
+  attrQuaternion: number;
+  attrScale: number;
+
   unifModel: WebGLUniformLocation;
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
@@ -44,6 +48,11 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
+
+    this.attrTranslation = gl.getAttribLocation(this.prog, "vs_Translation");
+    this.attrQuaternion = gl.getAttribLocation(this.prog, "vs_Quaternion");
+    this.attrScale = gl.getAttribLocation(this.prog, "vs_Scale");
+
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
@@ -103,12 +112,39 @@ class ShaderProgram {
       gl.vertexAttribPointer(this.attrCol, 4, gl.FLOAT, false, 0, 0);
     }
 
-    d.bindIdx();
-    gl.drawElements(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0);
+    if(d.isInstanced) {
+      if (this.attrTranslation != -1 && d.bindTranslations()) {
+        gl.enableVertexAttribArray(this.attrTranslation);
+        gl.vertexAttribPointer(this.attrTranslation, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribDivisor(this.attrTranslation, 1);
+      }
+
+      if (this.attrQuaternion != -1 && d.bindQuaternions()) {
+        gl.enableVertexAttribArray(this.attrQuaternion);
+        gl.vertexAttribPointer(this.attrQuaternion, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribDivisor(this.attrQuaternion, 1);
+      }
+
+      if (this.attrScale != -1 && d.bindScales()) {
+        gl.enableVertexAttribArray(this.attrScale);
+        gl.vertexAttribPointer(this.attrScale, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribDivisor(this.attrScale, 1);
+      }
+
+      d.bindIdx();
+      gl.drawElementsInstanced(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0, d.instances);
+    } else {
+      d.bindIdx();
+      gl.drawElements(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0);
+    }
 
     if (this.attrPos != -1) gl.disableVertexAttribArray(this.attrPos);
     if (this.attrNor != -1) gl.disableVertexAttribArray(this.attrNor);
     if (this.attrCol != -1) gl.disableVertexAttribArray(this.attrCol);
+
+    if (this.attrTranslation != -1) gl.disableVertexAttribArray(this.attrTranslation);
+    if (this.attrQuaternion != -1) gl.disableVertexAttribArray(this.attrQuaternion);
+    if (this.attrScale != -1) gl.disableVertexAttribArray(this.attrScale);
   }
 };
 

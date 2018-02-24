@@ -6,14 +6,14 @@ class Turtle {
   position: vec3;
   aim: vec3;
   scale: vec3;
-  height: number;
+  originalHeight: number;
   up: vec3;
 
   constructor(position: vec3, aim: vec3, scale: vec3, height: number, up: vec3) {
     this.position = position;
     this.aim = aim;
     this.scale = scale;
-    this.height = height;
+    this.originalHeight = height;
     this.up = up;
   }
 
@@ -72,7 +72,7 @@ class Turtle {
   move() {
     let moveAmount: vec3 = vec3.create();
     vec3.copy(moveAmount, this.aim);
-    vec3.scale(moveAmount, moveAmount, this.height * this.scale[1]);
+    vec3.scale(moveAmount, moveAmount, this.originalHeight * this.scale[1]);
 
     vec3.add(this.position, this.position, moveAmount);
   }
@@ -87,7 +87,7 @@ class Turtle {
     let newUp = vec3.create();
     vec3.copy(newUp, this.up);
 
-    let newTurtle: Turtle = new Turtle(newPosition, newAim, newScale, this.height, newUp);
+    let newTurtle: Turtle = new Turtle(newPosition, newAim, newScale, this.originalHeight, newUp);
     return newTurtle;
   }
 }

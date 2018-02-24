@@ -8,10 +8,21 @@ abstract class Drawable {
   bufNor: WebGLBuffer;
   bufCol: WebGLBuffer;
 
+  bufTranslations: WebGLBuffer;
+  bufQuaternions: WebGLBuffer;
+  bufScales: WebGLBuffer;
+
   idxBound: boolean = false;
   posBound: boolean = false;
   norBound: boolean = false;
   colBound: boolean = false;
+
+  translationsBound: boolean = false;
+  quaternionsBound: boolean = false;
+  scalesBound: boolean = false;
+
+  isInstanced: boolean = false;
+  instances: number = 0;
 
   abstract create() : void;
 
@@ -20,6 +31,9 @@ abstract class Drawable {
     gl.deleteBuffer(this.bufPos);
     gl.deleteBuffer(this.bufNor);
     gl.deleteBuffer(this.bufCol);
+    gl.deleteBuffer(this.bufTranslations);
+    gl.deleteBuffer(this.bufQuaternions);
+    gl.deleteBuffer(this.bufScales);
   }
 
   generateIdx() {
@@ -40,6 +54,21 @@ abstract class Drawable {
   generateCol() {
     this.colBound = true;
     this.bufCol = gl.createBuffer();
+  }
+
+  generateTranslations() {
+    this.translationsBound = true;
+    this.bufTranslations = gl.createBuffer();
+  }
+
+  generateQuaternions() {
+    this.quaternionsBound = true;
+    this.bufQuaternions = gl.createBuffer();
+  }
+
+  generateScales() {
+    this.scalesBound = true;
+    this.bufScales = gl.createBuffer();
   }
 
   bindIdx(): boolean {
@@ -68,6 +97,30 @@ abstract class Drawable {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.bufCol);
     }
     return this.colBound;
+  }
+
+  bindTranslations(): boolean {
+    if (this.translationsBound) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.bufTranslations);
+    }
+
+    return this.translationsBound;
+  }
+
+  bindQuaternions(): boolean {
+    if (this.quaternionsBound) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.bufQuaternions);
+    }
+
+    return this.quaternionsBound;
+  }
+
+  bindScales(): boolean {
+    if (this.scalesBound) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.bufScales);
+    }
+
+    return this.scalesBound;
   }
 
   elemCount(): number {
