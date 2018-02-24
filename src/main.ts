@@ -43,7 +43,7 @@ function loadScene() {
   leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
   leaf.create();
 
-  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(0,0,0,1));
+  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1));
   bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
   bark.create();
 }
