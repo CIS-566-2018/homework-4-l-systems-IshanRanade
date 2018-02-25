@@ -7,9 +7,9 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
-import LSystem from './LSystem'
-import Plant from './Plant'
-import PlantPart from './PlantPart'
+import LSystem from './LSystem/LSystem'
+import Plant from './LSystem/Plant'
+import PlantPart from './geometry/PlantPart'
 
 var OBJ = require('webgl-obj-loader');
 var meshes: any;

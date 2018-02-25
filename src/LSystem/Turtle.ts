@@ -1,6 +1,5 @@
 import {vec3, vec4, mat4, mat3, quat} from 'gl-matrix';
-import Drawable from './rendering/gl/Drawable';
-import {gl} from './globals';
+import {gl} from '../globals';
 
 class Turtle {
   position: vec3;

@@ -1,6 +1,6 @@
 import {vec3, vec4, mat4} from 'gl-matrix';
-import Drawable from './rendering/gl/Drawable';
-import {gl} from './globals';
+import Drawable from '../rendering/gl/Drawable';
+import {gl} from '../globals';
 
 class PlantPart extends Drawable {
   indices: Uint32Array;
