@@ -26,7 +26,7 @@ class Plant {
     let axiom: string = "FFFF+FFFF+[X]FFFFF+X";
     let grammar : { [key:string]:string; } = {};
     //grammar["X"] = "FFF[+F+X][-FFFFFX][+FFFF-+XFFFF]";
-    grammar["X"] = "FFF[+FFF+FFF+FF+FFX[X[X]]FFFF-FF*X][-FFF+F+FF*X[X[X]]]"
+    grammar["X"] = "FFF[+FFF+FFF+FF+FF*X[X[X]]FFFF-FF*X][-FFF+F+FF*X[X[X]]]"
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
     this.iterations = iterations;

@@ -31,7 +31,7 @@ let bark: PlantPart;
 let leaf: PlantPart;
 let rock: Rock;
 
-let barkColor: vec3 = vec3.fromValues(47,0,0);
+let barkColor: vec3 = vec3.fromValues(30,0,0);
 let leafColor: vec3 = vec3.fromValues(255, 153, 255);
 let rockColor: vec3 = vec3.fromValues(50,50,50);
 
@@ -67,8 +67,9 @@ function hexToRgb(hex: string) {
 
 function loadScene() {
   let rockTrans: mat4 = mat4.create();
-  mat4.translate(rockTrans, rockTrans, vec3.fromValues(20,-310,-12));
+  mat4.translate(rockTrans, rockTrans, vec3.fromValues(12,-310,-23));
   mat4.rotateY(rockTrans, rockTrans, 10);
+  mat4.scale(rockTrans, rockTrans, vec3.fromValues(15,15,15));
 
   rock = new Rock(vec3.fromValues(0,0,0), meshes, "rock", 
           vec4.fromValues(rockColor[0]/255.0,rockColor[1]/255.0,rockColor[2]/255.0,1), rockTrans);
@@ -132,10 +133,10 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  const camera = new Camera(vec3.fromValues(0, 0, -170), vec3.fromValues(0, 35, 0));
+  const camera = new Camera(vec3.fromValues(10, 50, -170), vec3.fromValues(0, 35, 0));
 
   const renderer = new OpenGLRenderer(canvas);
-  renderer.setClearColor(0.8, 0.8, 0.8, 1);
+  renderer.setClearColor(239/255.0, 201/255.0, 212/255.0, 1);
   gl.enable(gl.DEPTH_TEST);
 
   const lambert = new ShaderProgram([
