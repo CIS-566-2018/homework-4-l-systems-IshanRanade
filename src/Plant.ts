@@ -20,9 +20,9 @@ class Plant {
   meshes: any;
 
   constructor(center: vec3, meshes: any) {
-    let axiom: string = "FX";
+    let axiom: string = "FFFFFFFFX";
     let grammar : { [key:string]:string; } = {};
-    grammar["X"] = "[F+X]FX[-FX][+F-+XF]";
+    grammar["X"] = "FFF[+FFFFF+X][-FFFFFX][+FFFF-+XFFFF]";
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
   }
@@ -33,8 +33,8 @@ class Plant {
   }
 
   createTree() {
-    let lSystemString: string = this.lSystem.generateLSystemString(5);
-    //let lSystemString: string = "FFFFFFFFFF"
+    let lSystemString: string = this.lSystem.generateLSystemString(6);
+    //let lSystemString: string = "FFFFFFFFFF++FF";
 
     let barkName = "bark";
     let cylinderMeshSize = this.meshes[barkName].indices.length;
@@ -51,50 +51,58 @@ class Plant {
       }
     }
 
-    // this.translationsBark = [1,1,0,0,-1,-1,0,0];
-    // this.quaternionsBark = [0,0,0,0,0,0,0,0];
-    // this.scalesBark = [0,0,0,0,0,0,0,0];
-    // this.barkInstanceCount = 2;
-
     let originalCylinderHeight = maxY - minY;
+
     // let baseTrans: mat4 = mat4.create();
     // mat4.scale(baseTrans, baseTrans, vec3.fromValues(0.35,0.05,0.35)); 
     // mat4.translate(baseTrans, baseTrans, vec3.fromValues(0,-1.5,0));
 
     let turtles: Turtle[] = [];
-    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(0.025,0.25,0.025), originalCylinderHeight, vec3.fromValues(0,1,0), quat.fromValues(0,0,0,1)));
+    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(5,2,5), originalCylinderHeight * 0.6, vec3.fromValues(0,1,0), quat.fromValues(0,0,0,1)));
 
     let turtle: Turtle = turtles[0];
-
-    // console.log(turtle.position);
 
     for(let i: number = 0; i < lSystemString.length; ++i) {
       let c: string = lSystemString[i];
 
       if(c == "F") {
-        turtle.rotate(vec3.fromValues(0,0,1), (Math.random() - 0.5) * 30);
-        turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() - 0.5) * 30);
+        turtle.rotate(vec3.fromValues(0,0,1), (Math.random() * 5));
+        turtle.rotate(vec3.fromValues(1,0,0),  (Math.random()) * 5);
 
         if(turtle.aim[1] < 0) {
           turtle.reverseAimY();
         }
+
+        turtle.scale[0] *= 0.97;
+        turtle.scale[1] *= 0.97;
+        turtle.scale[2] *= 0.97;
 
         this.translationsBark.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
         this.quaternionsBark.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
         this.scalesBark.push(turtle.scale[0], turtle.scale[1], turtle.scale[2], 1);
         this.barkInstanceCount += 1
 
-        if(turtle.scale[1] < 0.25) {
-          this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
-          this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
-          this.scalesLeaf.push(0.1,0.1,0.1,1);
-          this.leafInstanceCount += 1;
+        if(turtle.scale[1] < 0.3) {
+          // this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
+          // this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
+          // this.scalesLeaf.push(0.1,0.1,0.1,1);
+          // this.leafInstanceCount += 1;
         }
 
         turtle.move();
       } else if(c == "[") {
         turtles.push(turtle.copy());
-        vec3.scale(turtle.scale, turtle.scale, 0.6);
+
+        turtle.scale[0] *= 0.6;
+        turtle.scale[1] *= 0.9;
+        turtle.scale[2] *= 0.6;
+
+        this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
+          this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
+          this.scalesLeaf.push(0.1,0.1,0.1,1);
+          this.leafInstanceCount += 1;
+
+        //vec3.scale(turtle.scale, turtle.scale, 0.6);
       } else if(c == "]") {
         turtle = turtles.pop();
         turtle.rotate(vec3.fromValues(0,0,1),  (Math.random() - 0.5) * 90);

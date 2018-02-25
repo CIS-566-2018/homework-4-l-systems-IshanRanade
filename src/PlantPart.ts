@@ -1,4 +1,4 @@
-import {vec3, vec4} from 'gl-matrix';
+import {vec3, vec4, mat4} from 'gl-matrix';
 import Drawable from './rendering/gl/Drawable';
 import {gl} from './globals';
 
@@ -18,14 +18,16 @@ class PlantPart extends Drawable {
   meshes: any;
   plantPart: string;
   color: vec4;
+  model: mat4;
 
-  constructor(center: vec3, meshes: any, plantPart: string, color: vec4) {
+  constructor(center: vec3, meshes: any, plantPart: string, color: vec4, model: mat4) {
     super(); // Call the constructor of the super class. This is required.
     this.center = vec4.fromValues(center[0], center[1], center[2], 1);
     this.isInstanced = true;
     this.meshes = meshes;
     this.plantPart = plantPart;
     this.color = color;
+    this.model = model;
   }
 
   setInstanceProperties(translations: number[], quaternions: number[], scales: number[], numInstances: number) {

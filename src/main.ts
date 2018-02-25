@@ -1,4 +1,4 @@
-import {vec3,vec4} from 'gl-matrix';
+import {vec3,vec4,mat4} from 'gl-matrix';
 import * as Stats from 'stats-js';
 import * as DAT from 'dat-gui';
 import Icosphere from './geometry/Icosphere';
@@ -16,7 +16,8 @@ var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
     'bark': 'src/objs/cylinder2.obj',
-    'leaf': 'src/objs/leaf.obj'
+    'leaf': 'src/objs/leaf.obj',
+    'cherryBlossom': 'src/objs/cherryBlossom.obj'
   }, function(m: any) {
     meshes = m;
     main();
@@ -39,14 +40,16 @@ function loadScene() {
   plant = new Plant(vec3.fromValues(0,0,0), meshes);
   plant.createTree();
 
-  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "leaf", vec4.fromValues(1,1,0,1));
+  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "cherryBlossom", vec4.fromValues(230/255.0,152/255.0,234/255.0,1), mat4.create());
   leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
   leaf.create();
 
-  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1));
+  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1), mat4.create());
   bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
   bark.create();
-  //console.log(plant.leafInstanceCount);
+
+  console.log(leaf.instances);
+  console.log(bark.instances);
 }
 
 function main() {
@@ -76,7 +79,7 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  const camera = new Camera(vec3.fromValues(0, 0, 6), vec3.fromValues(0, 1, 0));
+  const camera = new Camera(vec3.fromValues(0, 0,80), vec3.fromValues(0, 20, 0));
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.8, 0.8, 0.8, 1);
@@ -96,7 +99,6 @@ function main() {
     renderer.render(camera, lambert, [
        leaf,
        bark
-      //square
     ]);
     stats.end();
 
