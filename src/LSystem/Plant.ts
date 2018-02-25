@@ -21,14 +21,14 @@ class Plant {
 
   iterations: number;
 
-  constructor(center: vec3, meshes: any) {
+  constructor(center: vec3, meshes: any, iterations: number) {
     let axiom: string = "FFFF+FFFF+[X]FFFFF+X";
     let grammar : { [key:string]:string; } = {};
     //grammar["X"] = "FFF[+F+X][-FFFFFX][+FFFF-+XFFFF]";
     grammar["X"] = "FFF[+FFF+FFF+FF+FF*X[X[X]]][-FFF+F+FF*X[X[X]]]"
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
-    this.iterations = 6;
+    this.iterations = iterations;
   }
 
   rand(x: vec3) {

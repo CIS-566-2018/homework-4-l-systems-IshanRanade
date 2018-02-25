@@ -34,6 +34,11 @@ class OpenGLRenderer {
     prog.setGeometryColor(color);
 
     for (let drawable of drawables) {
+      if(drawable.isInstanced) {
+        prog.setIsInstanced(true);
+      } else {
+        prog.setIsInstanced(false);
+      }
       prog.draw(drawable);
     }
   }

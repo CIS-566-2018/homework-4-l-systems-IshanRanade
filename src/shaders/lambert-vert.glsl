@@ -25,6 +25,8 @@ in vec4 vs_Nor;             // The array of vertex normals passed to the shader
 
 in vec4 vs_Col;             // The array of vertex colors passed to the shader.
 
+uniform float u_IsInstance;
+
 in vec4 vs_Translation;
 in vec4 vs_Quaternion;
 in vec3 vs_Scale;
@@ -50,16 +52,18 @@ void main()
 
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
 
-    modelposition = vec4(modelposition[0] * vs_Scale[0], modelposition[1] * vs_Scale[1], modelposition[2] * vs_Scale[2], 1.f);
+    if(u_IsInstance == 1.f) {
+      modelposition = vec4(modelposition[0] * vs_Scale[0], modelposition[1] * vs_Scale[1], modelposition[2] * vs_Scale[2], 1.f);
 
-    vec3 v = vec3(modelposition);
-    vec3 u = vec3(vs_Quaternion);
-    float s = vs_Quaternion[3];
-    vec3 newPos = 2.0f * dot(u, v) * u + (s * s - dot(u, u)) * v + 2.0f * s * cross(u, v);
+      vec3 v = vec3(modelposition);
+      vec3 u = vec3(vs_Quaternion);
+      float s = vs_Quaternion[3];
+      vec3 newPos = 2.0f * dot(u, v) * u + (s * s - dot(u, u)) * v + 2.0f * s * cross(u, v);
 
-    newPos += vec3(vs_Translation);
+      newPos += vec3(vs_Translation);
 
-    modelposition = vec4(newPos, 1.f);
+      modelposition = vec4(newPos, 1.f);
+    }
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 
