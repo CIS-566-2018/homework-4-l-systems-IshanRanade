@@ -2,6 +2,7 @@ import {vec3, vec4, mat4, mat3, quat} from 'gl-matrix';
 import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
 import LSystem from './LSystem';
+import Node from './Node'
 import Turtle from './Turtle';
 
 class Plant {
@@ -37,7 +38,7 @@ class Plant {
   }
 
   createTree() {
-    let lSystemString: string = this.lSystem.generateLSystemString(this.iterations);
+    let lSystemNode: Node = this.lSystem.generateLSystemString(this.iterations);
 
     let barkName = "bark";
     let cylinderMeshSize = this.meshes[barkName].indices.length;
@@ -65,8 +66,10 @@ class Plant {
 
     let turtle: Turtle = turtles[0];
 
-    for(let i: number = 0; i < lSystemString.length; ++i) {
-      let c: string = lSystemString[i];
+    let tempNode = lSystemNode;
+    while(tempNode != null) {
+      let c: string = tempNode.val;
+      tempNode = tempNode.next;
 
       if(c == "F") {
 
@@ -74,7 +77,7 @@ class Plant {
           continue;
         }
 
-        if(i > 0) {
+        if(tempNode == lSystemNode) {
           turtle.rotate(vec3.fromValues(0,0,1), (Math.random() - 0.5) * 5);
           turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() -0.5) * 5);
         }
