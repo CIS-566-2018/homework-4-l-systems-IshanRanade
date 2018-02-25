@@ -25,7 +25,7 @@ class Plant {
     let axiom: string = "FFFF+FFFF+[X]FFFFF+X";
     let grammar : { [key:string]:string; } = {};
     //grammar["X"] = "FFF[+F+X][-FFFFFX][+FFFF-+XFFFF]";
-    grammar["X"] = "FFF[+FFF+FFF+FF+FF*X[X[X]]][-FFF+F+FF*X[X[X]]]"
+    grammar["X"] = "FFF[+FFF+FFF+FF+FFX[X[X]]FFFF-FF*X][-FFF+F+FF*X[X[X]]]"
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
     this.iterations = iterations;
@@ -69,6 +69,11 @@ class Plant {
       let c: string = lSystemString[i];
 
       if(c == "F") {
+
+        if(turtle.scale[0] < 0.02) {
+          continue;
+        }
+
         if(i > 0) {
           turtle.rotate(vec3.fromValues(0,0,1), (Math.random() - 0.5) * 5);
           turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() -0.5) * 5);
@@ -110,7 +115,12 @@ class Plant {
         turtle.rotate(tan, (Math.random() - 0.5) * 360);
         turtle.rotate(bit, (Math.random() - 0.5) * 360);
       } else if(c == "*") {
-        if(turtle.level > (5.0/3.0) * this.iterations) {
+
+        if(turtle.scale[0] < 0.02) {
+          continue;
+        }
+
+        if(turtle.level > (1.0/3.0) * this.iterations) {
           this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
           this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
           this.scalesLeaf.push(0.5,0.5,0.5,1);

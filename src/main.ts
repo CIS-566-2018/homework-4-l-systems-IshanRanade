@@ -113,7 +113,7 @@ function main() {
       barkColor = vec3.fromValues(rgb.r,rgb.g,rgb.b);
     }
   );
-  gui.add(controls, 'Iterations').min(1).max(6).step(1).onChange(
+  gui.add(controls, 'Iterations').min(1).max(7).step(1).onChange(
     function(iter: number) {
       iterations = iter;
     }

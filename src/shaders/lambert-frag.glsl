@@ -32,7 +32,7 @@ void main()
         // Avoid negative lighting values
         diffuseTerm = clamp(diffuseTerm, 0.f, 1.f);
 
-        float ambientTerm = 0.25;
+        float ambientTerm = 0.35;
 
         float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not
