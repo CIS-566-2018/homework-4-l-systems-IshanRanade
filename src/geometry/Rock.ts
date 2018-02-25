@@ -1,4 +1,4 @@
-import {vec3, vec4, mat4} from 'gl-matrix';
+import {vec3, vec4, mat4, quat} from 'gl-matrix';
 import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
 
@@ -35,7 +35,29 @@ class Rock extends Drawable {
     for(let i: number = 0; i < mesh.indices.length; ++i) {
       tempIndices.push(mesh.indices[i]);
 
-      let tempNormal: vec4 = vec4.fromValues(mesh.vertexNormals[i*3], mesh.vertexNormals[i*3+1], mesh.vertexNormals[i*3+2], 0);
+      let modNormal: vec3 = vec3.fromValues(mesh.vertexNormals[i*3], mesh.vertexNormals[i*3+1], mesh.vertexNormals[i*3+2]);
+
+      let tan: vec3 = vec3.create();
+      let bit: vec3 = vec3.create();
+
+      if(vec3.equals(modNormal, vec3.fromValues(1,0,0))) {
+        vec3.cross(tan, modNormal, vec3.fromValues(0,1,0));
+        vec3.cross(bit, modNormal, tan);
+      } else if(vec3.equals(modNormal, vec3.fromValues(0,1,0))) {
+        vec3.cross(tan, modNormal, vec3.fromValues(1,0,0));
+        vec3.cross(bit, modNormal, tan);
+      } else {
+        vec3.cross(tan, modNormal, vec3.fromValues(1,0,0));
+        vec3.cross(bit, modNormal, tan);
+      }
+
+      let trans: mat4 = mat4.create();
+      mat4.rotate(trans, trans, Math.random() * 0.25, tan);
+      mat4.rotate(trans, trans, Math.random() * 0.25, bit);
+
+      let tempNormal: vec4 = vec4.fromValues(modNormal[0], modNormal[1], modNormal[2], 0);
+      vec4.transformMat4(tempNormal, tempNormal, trans);
+
       let tempPosition: vec4 = vec4.fromValues(mesh.vertices[i*3], mesh.vertices[i*3+1], mesh.vertices[i*3+2], 1);
 
       vec4.transformMat4(tempNormal, tempNormal, this.model);
