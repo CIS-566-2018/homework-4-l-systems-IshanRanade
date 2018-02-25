@@ -15,7 +15,7 @@ var OBJ = require('webgl-obj-loader');
 var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
-    'bark': 'src/objs/cylinder2.obj',
+    'bark': 'src/objs/cylinder.obj',
     'leaf': 'src/objs/leaf.obj',
     'cherryBlossom': 'src/objs/cherryBlossom.obj'
   }, function(m: any) {
@@ -44,7 +44,7 @@ function loadScene() {
   leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
   leaf.create();
 
-  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(81/255.0, 63/255.0, 27/255.0, 1), mat4.create());
+  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(140/255.0, 140/255.0, 140/255.0, 1), mat4.create());
   bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
   bark.create();
 
@@ -79,7 +79,7 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  const camera = new Camera(vec3.fromValues(0, 0,80), vec3.fromValues(0, 20, 0));
+  const camera = new Camera(vec3.fromValues(0, 0, -80), vec3.fromValues(0, 20, 0));
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.8, 0.8, 0.8, 1);

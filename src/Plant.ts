@@ -22,7 +22,7 @@ class Plant {
   constructor(center: vec3, meshes: any) {
     let axiom: string = "FFFFFFFFX";
     let grammar : { [key:string]:string; } = {};
-    grammar["X"] = "FFF[+FFFFF+X][-FFFFFX][+FFFF-+XFFFF]";
+    grammar["X"] = "FFF[+F+X][-FFFFFX][+FFFF-+XFFFF]";
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
   }
@@ -58,7 +58,7 @@ class Plant {
     // mat4.translate(baseTrans, baseTrans, vec3.fromValues(0,-1.5,0));
 
     let turtles: Turtle[] = [];
-    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(5,2,5), originalCylinderHeight * 0.6, vec3.fromValues(0,1,0), quat.fromValues(0,0,0,1)));
+    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(5,2,5), originalCylinderHeight, vec3.fromValues(0,1,0), quat.fromValues(0,0,0,1), 0));
 
     let turtle: Turtle = turtles[0];
 
@@ -82,7 +82,7 @@ class Plant {
         this.scalesBark.push(turtle.scale[0], turtle.scale[1], turtle.scale[2], 1);
         this.barkInstanceCount += 1
 
-        if(turtle.scale[1] < 0.3) {
+        if(turtle.level > 5) {
           // this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
           // this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
           // this.scalesLeaf.push(0.1,0.1,0.1,1);
@@ -91,16 +91,18 @@ class Plant {
 
         turtle.move();
       } else if(c == "[") {
-        turtles.push(turtle.copy());
+        let newTurtle: Turtle = turtle.copy();
+        newTurtle.level += 1;
+        turtles.push(newTurtle);
 
-        turtle.scale[0] *= 0.6;
+        turtle.scale[0] *= 0.7;
         turtle.scale[1] *= 0.9;
-        turtle.scale[2] *= 0.6;
+        turtle.scale[2] *= 0.7;
 
-        this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
-          this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
-          this.scalesLeaf.push(0.1,0.1,0.1,1);
-          this.leafInstanceCount += 1;
+        // this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
+        // this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
+        // this.scalesLeaf.push(0.1,0.1,0.1,1);
+        // this.leafInstanceCount += 1;
 
         //vec3.scale(turtle.scale, turtle.scale, 0.6);
       } else if(c == "]") {

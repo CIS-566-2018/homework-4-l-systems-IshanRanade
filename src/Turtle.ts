@@ -9,14 +9,16 @@ class Turtle {
   originalHeight: number;
   up: vec3;
   quaternion: quat;
+  level: number;
 
-  constructor(position: vec3, aim: vec3, scale: vec3, height: number, up: vec3, quaternion: quat) {
+  constructor(position: vec3, aim: vec3, scale: vec3, height: number, up: vec3, quaternion: quat, level: number) {
     this.position = position;
     this.aim = aim;
     this.scale = scale;
     this.originalHeight = height;
     this.up = up;
     this.quaternion = quaternion;
+    this.level = level;
   }
 
   toRadians(angle: number) {
@@ -70,7 +72,7 @@ class Turtle {
     let newQuat = quat.create();
     quat.copy(newQuat, this.quaternion);
 
-    let newTurtle: Turtle = new Turtle(newPosition, newAim, newScale, this.originalHeight, newUp, newQuat);
+    let newTurtle: Turtle = new Turtle(newPosition, newAim, newScale, this.originalHeight, newUp, newQuat, this.level);
     return newTurtle;
   }
 }
