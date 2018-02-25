@@ -32,12 +32,14 @@ void main()
         // Avoid negative lighting values
         // diffuseTerm = clamp(diffuseTerm, 0, 1);
 
-        float ambientTerm = 0.2;
+        float ambientTerm = 0.5;
 
         float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not
                                                             //lit by our point light are not completely black.
+        lightIntensity = max(lightIntensity, 0.25f);
+        vec4 lightColor = vec4(1,0,0,0);
 
         // Compute final shaded color
-        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);// + lightColor * lightIntensity;
 }

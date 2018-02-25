@@ -37,14 +37,19 @@ let bark: PlantPart;
 let leaf: PlantPart;
 
 function loadScene() {
+  let barkColor: vec3 = vec3.fromValues(47,0,0);
+  let leafColor: vec3 = vec3.fromValues(255, 153, 255);
+
   plant = new Plant(vec3.fromValues(0,0,0), meshes);
   plant.createTree();
 
-  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "cherryBlossom", vec4.fromValues(230/255.0,152/255.0,234/255.0,1), mat4.create());
+  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "cherryBlossom", 
+          vec4.fromValues(leafColor[0]/255.0,leafColor[1]/255.0,leafColor[2]/255.0,1), mat4.create());
   leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
   leaf.create();
 
-  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", vec4.fromValues(140/255.0, 140/255.0, 140/255.0, 1), mat4.create());
+  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", 
+          vec4.fromValues(barkColor[0]/255.0, barkColor[1]/255.0, barkColor[2]/255.0, 1), mat4.create());
   bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
   bark.create();
 
