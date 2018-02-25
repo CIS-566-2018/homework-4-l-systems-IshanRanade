@@ -62,7 +62,7 @@ class Plant {
     // mat4.translate(baseTrans, baseTrans, vec3.fromValues(0,-1.5,0));
 
     let turtles: Turtle[] = [];
-    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(5,2,5), originalCylinderHeight, vec3.fromValues(0,1,0), quat.fromValues(0,0,0,1), 0));
+    turtles.push(new Turtle(vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), vec3.fromValues(5,2.2,5), originalCylinderHeight, vec3.fromValues(0,1,0), quat.fromValues(0,0,0,1), 0));
 
     let turtle: Turtle = turtles[0];
 

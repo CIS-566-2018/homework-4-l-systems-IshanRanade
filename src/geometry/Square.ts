@@ -16,20 +16,25 @@ class Square extends Drawable {
 
   create() {
 
+    let topLeft: vec3     = vec3.fromValues(0,255.0,0);
+    let topRight: vec3    = vec3.fromValues(0,255.0,0);
+    let bottomLeft: vec3  = vec3.fromValues(0,0,255.0);
+    let bottomRight: vec3 = vec3.fromValues(255.0,0,0);
+
     this.indices = new Uint32Array([0, 1, 2,
                                     0, 2, 3]);
     this.normals = new Float32Array([0, 0, 1, 0,
                                     0, 0, 1, 0,
                                     0, 0, 1, 0,
                                     0, 0, 1, 0]);
-    this.positions = new Float32Array([-1, -1, 0, 1,
-                                    1, -1, 0, 1,
-                                    1, 1, 0, 1,
-                                    -1, 1, 0, 1]);
-    this.colors = new Float32Array([0, 1, 1, 1,
-                                    0, 1, 0, 1,
-                                    0, 1, 0, 1,
-                                    0, 1, 0, 1]);
+    this.positions = new Float32Array([-0.5, -0.5, 0.999999, 1,
+                                    0.5, -0.5, 0.999999, 1,
+                                    0.5, 0.5, 0.999999, 1,
+                                    -0.5, 0.5, 0.999999, 1]);
+    this.colors = new Float32Array([0, 1, 0, 1,
+                                    1, 0, 0, 1,
+                                    0, 0, 1, 1,
+                                    1, 0, 0, 1]);
 
     this.generateIdx();
     this.generatePos();
@@ -48,8 +53,6 @@ class Square extends Drawable {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufCol);
     gl.bufferData(gl.ARRAY_BUFFER, this.colors, gl.STATIC_DRAW);
-
-    console.log(`Created square`);
   }
 };
 

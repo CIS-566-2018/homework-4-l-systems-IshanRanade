@@ -44,7 +44,7 @@ class Rock extends Drawable {
         vec3.cross(tan, modNormal, vec3.fromValues(0,1,0));
         vec3.cross(bit, modNormal, tan);
       } else if(vec3.equals(modNormal, vec3.fromValues(0,1,0))) {
-        vec3.cross(tan, modNormal, vec3.fromValues(1,0,0));
+        vec3.cross(tan, modNormal, vec3.fromValues(0,0,1));
         vec3.cross(bit, modNormal, tan);
       } else {
         vec3.cross(tan, modNormal, vec3.fromValues(1,0,0));
@@ -52,8 +52,8 @@ class Rock extends Drawable {
       }
 
       let trans: mat4 = mat4.create();
-      mat4.rotate(trans, trans, Math.random() * 0.25, tan);
-      mat4.rotate(trans, trans, Math.random() * 0.25, bit);
+      mat4.rotate(trans, trans, Math.random() * 0.2, tan);
+      mat4.rotate(trans, trans, Math.random() * 0.2, bit);
 
       let tempNormal: vec4 = vec4.fromValues(modNormal[0], modNormal[1], modNormal[2], 0);
       vec4.transformMat4(tempNormal, tempNormal, trans);

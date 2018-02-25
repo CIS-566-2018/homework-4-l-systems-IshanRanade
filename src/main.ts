@@ -31,6 +31,8 @@ let bark: PlantPart;
 let leaf: PlantPart;
 let rock: Rock;
 
+let background: Square;
+
 let barkColor: vec3 = vec3.fromValues(30,0,0);
 let leafColor: vec3 = vec3.fromValues(255, 153, 255);
 let rockColor: vec3 = vec3.fromValues(50,50,50);
@@ -67,7 +69,7 @@ function hexToRgb(hex: string) {
 
 function loadScene() {
   let rockTrans: mat4 = mat4.create();
-  mat4.translate(rockTrans, rockTrans, vec3.fromValues(12,-310,-23));
+  mat4.translate(rockTrans, rockTrans, vec3.fromValues(12,-315,-23));
   mat4.rotateY(rockTrans, rockTrans, 10);
   mat4.scale(rockTrans, rockTrans, vec3.fromValues(15,15,15));
 
@@ -87,6 +89,9 @@ function loadScene() {
           vec4.fromValues(barkColor[0]/255.0, barkColor[1]/255.0, barkColor[2]/255.0, 1), mat4.create());
   bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
   bark.create();
+
+  background = new Square(vec3.fromValues(0,0,0));
+  background.create();
 }
 
 function main() {
@@ -133,7 +138,9 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  const camera = new Camera(vec3.fromValues(10, 50, -170), vec3.fromValues(0, 35, 0));
+  let cameraPos: vec3 = vec3.fromValues(0, 25, -200);
+  vec3.rotateY(cameraPos, cameraPos, vec3.fromValues(0,0,0), 290 * Math.PI / 180.0);
+  const camera = new Camera(cameraPos, vec3.fromValues(0, 35, 0));
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(239/255.0, 201/255.0, 212/255.0, 1);
@@ -144,17 +151,32 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const backgroundShader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/background-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/background-frag.glsl')),
+  ]);
+
   // This function will be called every frame
   function tick() {
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+
     renderer.render(camera, lambert, [
-       leaf,
-       bark,
-       rock
-    ]);
+      leaf,
+      bark,
+      rock
+   ]);
+
+    // renderer.render(camera, backgroundShader, [
+    //   background
+    // ]);
+
+
+
+ 
+
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
