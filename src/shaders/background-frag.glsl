@@ -15,14 +15,12 @@ uniform vec4 u_Color; // The color with which to render this instance of geometr
 
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
-in vec4 fs_Nor;
-in vec4 fs_LightVec;
-in vec4 fs_Col;
+
 
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
 
 void main()
 {
-    out_Col = fs_Col;
+    out_Col = vec4(1,0,0,1);
 }

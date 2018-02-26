@@ -130,19 +130,19 @@ class ShaderProgram {
     if(d.isInstanced) {
       if (this.attrTranslation != -1 && d.bindTranslations()) {
         gl.enableVertexAttribArray(this.attrTranslation);
-        gl.vertexAttribPointer(this.attrTranslation, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribPointer(this.attrTranslation, 4, gl.FLOAT, false, 0, 0);
         gl.vertexAttribDivisor(this.attrTranslation, 1);
       }
 
       if (this.attrQuaternion != -1 && d.bindQuaternions()) {
         gl.enableVertexAttribArray(this.attrQuaternion);
-        gl.vertexAttribPointer(this.attrQuaternion, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribPointer(this.attrQuaternion, 4, gl.FLOAT, false, 0, 0);
         gl.vertexAttribDivisor(this.attrQuaternion, 1);
       }
 
       if (this.attrScale != -1 && d.bindScales()) {
         gl.enableVertexAttribArray(this.attrScale);
-        gl.vertexAttribPointer(this.attrScale, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribPointer(this.attrScale, 4, gl.FLOAT, false, 0, 0);
         gl.vertexAttribDivisor(this.attrScale, 1);
       }
 
