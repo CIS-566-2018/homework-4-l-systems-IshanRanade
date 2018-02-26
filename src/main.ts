@@ -68,15 +68,6 @@ function hexToRgb(hex: string) {
 }
 
 function loadScene() {
-  let rockTrans: mat4 = mat4.create();
-  mat4.translate(rockTrans, rockTrans, vec3.fromValues(12,-315,-23));
-  mat4.rotateY(rockTrans, rockTrans, 10);
-  mat4.scale(rockTrans, rockTrans, vec3.fromValues(15,15,15));
-
-  rock = new Rock(vec3.fromValues(0,0,0), meshes, "rock", 
-          vec4.fromValues(rockColor[0]/255.0,rockColor[1]/255.0,rockColor[2]/255.0,1), rockTrans);
-  rock.create();
-
   plant = new Plant(vec3.fromValues(0,0,0), meshes, iterations);
   plant.createTree();
 
@@ -95,6 +86,7 @@ function loadScene() {
 }
 
 function main() {
+  
   // Initial display for framerate
   const stats = Stats();
   stats.setMode(0);
@@ -156,6 +148,15 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/background-frag.glsl')),
   ]);
 
+  let rockTrans: mat4 = mat4.create();
+  mat4.translate(rockTrans, rockTrans, vec3.fromValues(12,-315,-23));
+  mat4.rotateY(rockTrans, rockTrans, 10);
+  mat4.scale(rockTrans, rockTrans, vec3.fromValues(15,15,15));
+
+  rock = new Rock(vec3.fromValues(0,0,0), meshes, "rock", 
+          vec4.fromValues(rockColor[0]/255.0,rockColor[1]/255.0,rockColor[2]/255.0,1), rockTrans);
+  rock.create();
+
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -163,15 +164,17 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
+    renderer.render(camera, backgroundShader, [
+      background
+    ]);
+
     renderer.render(camera, lambert, [
       leaf,
       bark,
       rock
-   ]);
+    ]);
 
-    // renderer.render(camera, backgroundShader, [
-    //   background
-    // ]);
+ 
 
 
 

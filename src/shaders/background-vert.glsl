@@ -40,7 +40,13 @@ const vec4 lightPos = vec4(500, 500, -300, 1); //The position of our virtual lig
 
 void main()
 {
-    fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
+    if(vs_Pos[0] == -0.5f && vs_Pos[1] == 0.5f) {
+      fs_Col = vec4(1,0,0,1);
+    } else {
+      fs_Col = vec4(0,1,1,1);  
+    }
+    //fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
+    fs_Col = vec4(1,0,0,1);
 
     gl_Position = vs_Pos;
 }
