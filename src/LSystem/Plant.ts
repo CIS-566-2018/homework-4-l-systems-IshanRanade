@@ -22,7 +22,9 @@ class Plant {
 
   iterations: number;
 
-  constructor(center: vec3, meshes: any, iterations: number) {
+  rng: any;
+
+  constructor(center: vec3, meshes: any, iterations: number, rng: any) {
     let axiom: string = "FFFF+FFFF+[X]FFFFF+X";
     let grammar : { [key:string]:string; } = {};
     //grammar["X"] = "FFF[+F+X][-FFFFFX][+FFFF-+XFFFF]";
@@ -30,6 +32,7 @@ class Plant {
     this.lSystem = new LSystem(axiom, grammar);
     this.meshes = meshes;
     this.iterations = iterations;
+    this.rng = rng;
   }
 
   rand(x: vec3) {
@@ -45,7 +48,7 @@ class Plant {
 
     let minY: number =  1000000000000;
     let maxY: number = -1000000000000;
-    for(let i: number = 0; i < this.meshes[barkName].vertices.length;  i+=3) {
+    for(let i: number = 0; i < this.meshes[barkName].vertices.length; i+=3) {
       if(this.meshes[barkName].vertices[i+1] < minY) {
         minY = this.meshes[barkName].vertices[i+1];
       }
@@ -78,8 +81,8 @@ class Plant {
         }
 
         if(tempNode == lSystemNode) {
-          turtle.rotate(vec3.fromValues(0,0,1), (Math.random() - 0.5) * 5);
-          turtle.rotate(vec3.fromValues(1,0,0),  (Math.random() -0.5) * 5);
+          turtle.rotate(vec3.fromValues(0,0,1), (this.rng() - 0.5) * 5);
+          turtle.rotate(vec3.fromValues(1,0,0),  (this.rng() -0.5) * 5);
         }
 
         if(turtle.aim[1] < 0 && turtle.level < 8) {
@@ -106,17 +109,17 @@ class Plant {
         turtle.scale[2] *= 0.7;
       } else if(c == "]") {
         turtle = turtles.pop();
-        turtle.rotate(vec3.fromValues(0,0,1),  (Math.random() - 0.5) * 90);
+        turtle.rotate(vec3.fromValues(0,0,1),  (this.rng() - 0.5) * 90);
       } else if(c == "+") {
         let tan: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(1,0,0));
         let bit: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(0,0,1));
-        turtle.rotate(tan, (Math.random() - 0.5) * 30);
-        turtle.rotate(bit, (Math.random() - 0.5) * 30);
+        turtle.rotate(tan, (this.rng() - 0.5) * 30);
+        turtle.rotate(bit, (this.rng() - 0.5) * 30);
       } else if(c == "-") {
         let tan: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(1,0,0));
         let bit: vec3 = turtle.rotateVectorByQuat(vec3.fromValues(0,0,1));
-        turtle.rotate(tan, (Math.random() - 0.5) * 360);
-        turtle.rotate(bit, (Math.random() - 0.5) * 360);
+        turtle.rotate(tan, (this.rng() - 0.5) * 360);
+        turtle.rotate(bit, (this.rng() - 0.5) * 360);
       } else if(c == "*") {
 
         if(turtle.scale[0] < 0.02) {

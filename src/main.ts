@@ -25,6 +25,8 @@ window.onload = function() {
   });
 }
 
+var seedrandom = require('seedrandom');
+
 let plant: Plant;
 
 let bark: PlantPart;
@@ -38,6 +40,7 @@ let leafColor: vec3 = vec3.fromValues(245, 177, 245);
 let rockColor: vec3 = vec3.fromValues(50,50,50);
 
 let iterations = 6;
+let seed: number = 9;
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -68,7 +71,7 @@ function hexToRgb(hex: string) {
 }
 
 function loadScene() {
-  plant = new Plant(vec3.fromValues(0,0,0), meshes, iterations);
+  plant = new Plant(vec3.fromValues(0,0,0), meshes, iterations, seedrandom(seed));
   plant.createTree();
 
   leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "cherryBlossom", 
@@ -83,6 +86,8 @@ function loadScene() {
 
   background = new Square(vec3.fromValues(0,0,0));
   background.create();
+
+  seed++;
 }
 
 function main() {
