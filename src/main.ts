@@ -34,7 +34,7 @@ let rock: Rock;
 let background: Square;
 
 let barkColor: vec3 = vec3.fromValues(30,0,0);
-let leafColor: vec3 = vec3.fromValues(255, 153, 255);
+let leafColor: vec3 = vec3.fromValues(245, 177, 245);
 let rockColor: vec3 = vec3.fromValues(50,50,50);
 
 let iterations = 6;
@@ -135,7 +135,9 @@ function main() {
   const camera = new Camera(cameraPos, vec3.fromValues(0, 35, 0));
 
   const renderer = new OpenGLRenderer(canvas);
-  renderer.setClearColor(239/255.0, 201/255.0, 212/255.0, 1);
+  //renderer.setClearColor(1,0,0,1);
+  renderer.setClearColor(187/255.0, 249/255.0, 249/255.0, 1);
+  //renderer.setClearColor(239/255.0, 201/255.0, 212/255.0, 1);
   gl.enable(gl.DEPTH_TEST);
 
   const lambert = new ShaderProgram([
@@ -164,9 +166,16 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
+    gl.disable(gl.DEPTH_TEST);
     renderer.render(camera, backgroundShader, [
       background
     ]);
+
+    gl.enable(gl.DEPTH_TEST);
+
+    // renderer.render(camera, lambert, [rock]);
+
+    // renderer.render(camera, lambert, [bark, leaf]);
 
     renderer.render(camera, lambert, [
       leaf,
