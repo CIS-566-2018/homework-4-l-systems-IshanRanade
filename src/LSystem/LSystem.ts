@@ -11,9 +11,6 @@ export class LSystem {
   }
 
   generateLSystemString(iterations: number) {
-
-    console.log("Here");
-
     let result: Node = new Node(this.axiom[0]);
 
     let temp = result;

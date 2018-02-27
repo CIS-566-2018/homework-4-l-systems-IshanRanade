@@ -5,6 +5,12 @@ import LSystem from './LSystem';
 import Node from './Node'
 import Turtle from './Turtle';
 
+var kdTree = require('k-d-tree');
+
+var distance = function(a: any, b: any){
+  return Math.sqrt(Math.pow(a.coordinates[0] - b.coordinates[0], 2) +  Math.pow(a.coordinates[1] - b.coordinates[1], 2) + Math.pow(a.coordinates[2] - b.coordinates[2], 2));
+}
+
 class Plant {
   translationsBark: number[] = [];
   quaternionsBark: number[] = [];
@@ -23,8 +29,12 @@ class Plant {
   iterations: number;
 
   rng: any;
+  
+  nearestTree = new kdTree([], distance);
 
-  constructor(center: vec3, meshes: any, iterations: number, rng: any) {
+  collisionCheck: boolean = false;
+
+  constructor(center: vec3, meshes: any, iterations: number, rng: any, collisionCheck: boolean) {
     let axiom: string = "FFFF+FFFF+[X]FFFFF+X";
     let grammar : { [key:string]:string; } = {};
     //grammar["X"] = "FFF[+F+X][-FFFFFX][+FFFF-+XFFFF]";
@@ -33,6 +43,7 @@ class Plant {
     this.meshes = meshes;
     this.iterations = iterations;
     this.rng = rng;
+    this.collisionCheck = collisionCheck;
   }
 
   rand(x: vec3) {
@@ -127,12 +138,27 @@ class Plant {
         }
 
         if(turtle.level > (1.0/3.0) * this.iterations) {
-          this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
-          this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
-          this.scalesLeaf.push(0.5,0.5,0.5,1);
-          this.leafInstanceCount += 1;
+          var flowerCoord = {
+            coordinates: [turtle.position[0], turtle.position[1], turtle.position[2]]
+          };
+
+          var nearest = this.nearestTree.nearest(flowerCoord, 1, 5.0);
+
+          //console.log(nearest);
+
+          if(nearest.length == 0 || !this.collisionCheck) {
+            this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
+            this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
+            this.scalesLeaf.push(0.5,0.5,0.5,1);
+            this.leafInstanceCount += 1;
+  
+            this.nearestTree.insert(flowerCoord);
+
+            
+          } else {
+            console.log(nearest[0][1]);
+          }
         }
- 
       }
     }
   }

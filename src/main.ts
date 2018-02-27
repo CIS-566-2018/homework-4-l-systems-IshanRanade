@@ -42,6 +42,8 @@ let rockColor: vec3 = vec3.fromValues(50,50,50);
 let iterations = 6;
 let seed: number = 9;
 
+let collisionCheck: boolean = false;
+
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
@@ -49,7 +51,12 @@ const controls = {
   'Generate': loadScene, // A function pointer, essentially
   'Leaf Color': [leafColor[0], leafColor[1], leafColor[2]],
   'Bark Color': [barkColor[0], barkColor[1], barkColor[2]],
-  'Iterations': 6
+  'Iterations': 6,
+  'Leaf Collision': (function() {
+    collisionCheck = !collisionCheck;
+    seed--;
+    loadScene();
+  })
 };
 
 function componentToHex(c: number) {
@@ -71,7 +78,7 @@ function hexToRgb(hex: string) {
 }
 
 function loadScene() {
-  plant = new Plant(vec3.fromValues(0,0,0), meshes, iterations, seedrandom(seed));
+  plant = new Plant(vec3.fromValues(0,0,0), meshes, iterations, seedrandom(seed), collisionCheck);
   plant.createTree();
 
   leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "cherryBlossom", 
@@ -86,11 +93,6 @@ function loadScene() {
 
   background = new Square(vec3.fromValues(0,0,0));
   background.create();
-
-console.log(leaf.translations.length);
-console.log(leaf.quaternions.length);
-console.log(leaf.scales.length);
-
 
   seed++;
 }
@@ -126,6 +128,7 @@ function main() {
       iterations = iter;
     }
   )
+  gui.add(controls, 'Leaf Collision');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
