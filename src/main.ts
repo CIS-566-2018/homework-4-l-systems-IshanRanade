@@ -87,6 +87,11 @@ function loadScene() {
   background = new Square(vec3.fromValues(0,0,0));
   background.create();
 
+console.log(leaf.translations.length);
+console.log(leaf.quaternions.length);
+console.log(leaf.scales.length);
+
+
   seed++;
 }
 
@@ -171,35 +176,17 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
-    //gl.enable(gl.DEPTH_TEST);
     renderer.render(camera, backgroundShader, [
       background
     ]);
 
-    //gl.disable(gl.DEPTH_TEST);
     renderer.render(camera, lambert, [
+      leaf,
+      bark,
       rock
     ]);
 
-    //gl.enable(gl.DEPTH_TEST);
 
-    // renderer.render(camera, lambert, [rock]);
-
-    // renderer.render(camera, lambert, [bark, leaf]);
-
-    //gl.disable(gl.DEPTH_TEST);
-    renderer.render(camera, lambert, [
-      // leaf,
-       bark,
-      //rock
-      //background
-    ]);
-
- 
-
-
-
- 
 
     stats.end();
 
