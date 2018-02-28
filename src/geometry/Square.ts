@@ -16,10 +16,14 @@ class Square extends Drawable {
 
   create() {
 
-    let topLeft: vec3     = vec3.fromValues(0,255.0,0);
-    let topRight: vec3    = vec3.fromValues(0,0,0);
-    let bottomLeft: vec3  = vec3.fromValues(0,0,0);
-    let bottomRight: vec3 = vec3.fromValues(0,0,0);
+    let topLeft: vec3     = vec3.fromValues(204, 245, 255);
+    vec3.scale(topLeft, topLeft, 1/255.0);
+    let topRight: vec3    = vec3.fromValues(204, 245, 255);
+    vec3.scale(topRight, topRight, 1/255.0);
+    let bottomLeft: vec3  = vec3.fromValues(255, 179, 179);
+    vec3.scale(bottomLeft, bottomLeft, 1/255.0);
+    let bottomRight: vec3 = vec3.fromValues(255, 179, 179);
+    vec3.scale(bottomRight, bottomRight, 1/255.0);
 
     this.indices = new Uint32Array([0, 1, 2,
                                     0, 2, 3]);
@@ -27,14 +31,14 @@ class Square extends Drawable {
                                     0, 0, 1, 0,
                                     0, 0, 1, 0,
                                     0, 0, 1, 0]);
-    this.positions = new Float32Array([-0.5, -0.5, 0.99999, 1,
-                                    0.5, -0.5, 0.99999, 1,
-                                    0.5, 0.5, 0.99999, 1,
-                                    -0.5, 0.5, 0.99999, 1]);
-    this.colors = new Float32Array([topLeft[0], topLeft[1], topLeft[2], 1,
-                                    1, 0, 0, 1,
-                                    1, 0, 0, 1,
-                                    1, 0, 0, 1]);
+    this.positions = new Float32Array([-1.0, -1.0, 0.99999, 1,
+                                    1.0, -1.0, 0.99999, 1,
+                                    1.0, 1.0, 0.99999, 1,
+                                    -1.0, 1.0, 0.99999, 1]);
+    this.colors = new Float32Array([bottomLeft[0], bottomLeft[1], bottomLeft[2], 1,
+                                    bottomRight[0], bottomRight[1], bottomRight[2], 1,
+                                    topRight[0], topRight[1], topRight[2], 1,
+                                    topLeft[0], topLeft[1], topLeft[2], 1]);
 
     this.generateIdx();
     this.generatePos();
