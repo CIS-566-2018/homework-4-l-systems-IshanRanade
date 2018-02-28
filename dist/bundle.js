@@ -3579,7 +3579,7 @@ function main() {
     Object(__WEBPACK_IMPORTED_MODULE_6__globals__["b" /* setGL */])(gl);
     // Initial call to load scene
     loadScene();
-    let cameraPos = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 25, -200);
+    let cameraPos = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 25, -275);
     __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].rotateY(cameraPos, cameraPos, __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0), 290 * Math.PI / 180.0);
     const camera = new __WEBPACK_IMPORTED_MODULE_5__Camera__["a" /* default */](cameraPos, __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 35, 0));
     const renderer = new __WEBPACK_IMPORTED_MODULE_4__rendering_gl_OpenGLRenderer__["a" /* default */](canvas);
@@ -12134,24 +12134,28 @@ class Square extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a" /*
         this.center = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(center[0], center[1], center[2], 1);
     }
     create() {
-        let topLeft = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 255.0, 0);
-        let topRight = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0);
-        let bottomLeft = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0);
-        let bottomRight = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0);
+        let topLeft = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(196, 77, 255);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(topLeft, topLeft, 1 / 255.0);
+        let topRight = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(196, 77, 255);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(topRight, topRight, 1 / 255.0);
+        let bottomLeft = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 117, 26);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(bottomLeft, bottomLeft, 1 / 255.0);
+        let bottomRight = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 117, 26);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(bottomRight, bottomRight, 1 / 255.0);
         this.indices = new Uint32Array([0, 1, 2,
             0, 2, 3]);
         this.normals = new Float32Array([0, 0, 1, 0,
             0, 0, 1, 0,
             0, 0, 1, 0,
             0, 0, 1, 0]);
-        this.positions = new Float32Array([-0.5, -0.5, 0.99999, 1,
-            0.5, -0.5, 0.99999, 1,
-            0.5, 0.5, 0.99999, 1,
-            -0.5, 0.5, 0.99999, 1]);
-        this.colors = new Float32Array([topLeft[0], topLeft[1], topLeft[2], 1,
-            1, 0, 0, 1,
-            1, 0, 0, 1,
-            1, 0, 0, 1]);
+        this.positions = new Float32Array([-1.0, -1.0, 0.99999, 1,
+            1.0, -1.0, 0.99999, 1,
+            1.0, 1.0, 0.99999, 1,
+            -1.0, 1.0, 0.99999, 1]);
+        this.colors = new Float32Array([bottomLeft[0], bottomLeft[1], bottomLeft[2], 1,
+            bottomRight[0], bottomRight[1], bottomRight[2], 1,
+            topRight[0], topRight[1], topRight[2], 1,
+            topLeft[0], topLeft[1], topLeft[2], 1]);
         this.generateIdx();
         this.generatePos();
         this.generateNor();
@@ -12233,7 +12237,7 @@ class Camera {
     constructor(position, target) {
         this.projectionMatrix = __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].create();
         this.viewMatrix = __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].create();
-        this.fovy = 45;
+        this.fovy = 45 * Math.PI / 180;
         this.aspectRatio = 1;
         this.near = 0.1;
         this.far = 10000;
@@ -12247,6 +12251,7 @@ class Camera {
         });
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].add(this.target, this.position, this.direction);
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+        this.controls.mode = 'turntable';
     }
     setAspectRatio(aspectRatio) {
         this.aspectRatio = aspectRatio;
@@ -16305,7 +16310,12 @@ class Rock extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a" /* d
             __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].transformMat4(tempPosition, tempPosition, this.model);
             tempNormals.push(tempNormal[0], tempNormal[1], tempNormal[2], 0);
             tempPositions.push(tempPosition[0], tempPosition[1], tempPosition[2], 1);
-            tempColors.push(this.color[0], this.color[1], this.color[2], this.color[3]);
+            if (this.objName == "rock") {
+                tempColors.push(51 / 255.0, 51 / 255.0, 77 / 255.0, this.color[3]);
+            }
+            else {
+                tempColors.push(this.color[0], this.color[1], this.color[2], this.color[3]);
+            }
         }
         this.indices = new Uint32Array(tempIndices);
         this.normals = new Float32Array(tempNormals);
@@ -17361,7 +17371,7 @@ module.exports = "#version 300 es\n\n//This is a vertex shader. While it is call
 /* 88 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\n// This is a fragment shader. If you've opened this file first, please\n// open and read lambert.vert.glsl before reading on.\n// Unlike the vertex shader, the fragment shader actually does compute\n// the shading of geometry. For every pixel in your program's output\n// screen, the fragment shader is run for every bit of geometry that\n// particular pixel overlaps. By implicitly interpolating the position\n// data passed into the fragment shader by the vertex shader, the fragment shader\n// can compute what color to apply to its pixel based on things like vertex\n// position, light position, and vertex color.\nprecision highp float;\n\nuniform vec4 u_Color; // The color with which to render this instance of geometry.\n\n// These are the interpolated values out of the rasterizer, so you can't know\n// their specific values without knowing the vertices that contributed to them\nin vec4 fs_Nor;\nin vec4 fs_LightVec;\nin vec4 fs_Col;\n\nout vec4 out_Col; // This is the final output color that you will see on your\n                  // screen for the pixel that is currently being processed.\n\nvoid main()\n{\n    // Material base color (before shading)\n        vec4 diffuseColor = fs_Col;\n\n        // Calculate the diffuse term for Lambert shading\n        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));\n        // Avoid negative lighting values\n        diffuseTerm = clamp(diffuseTerm, 0.f, 1.f);\n\n        float ambientTerm = 0.35;\n\n        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier\n                                                            //to simulate ambient lighting. This ensures that faces that are not\n                                                            //lit by our point light are not completely black.\n        vec4 lightColor = vec4(1,0,0,0);\n\n        // Compute final shaded color\n        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);// + lightColor * lightIntensity;\n}\n"
+module.exports = "#version 300 es\n\n// This is a fragment shader. If you've opened this file first, please\n// open and read lambert.vert.glsl before reading on.\n// Unlike the vertex shader, the fragment shader actually does compute\n// the shading of geometry. For every pixel in your program's output\n// screen, the fragment shader is run for every bit of geometry that\n// particular pixel overlaps. By implicitly interpolating the position\n// data passed into the fragment shader by the vertex shader, the fragment shader\n// can compute what color to apply to its pixel based on things like vertex\n// position, light position, and vertex color.\nprecision highp float;\n\nuniform vec4 u_Color; // The color with which to render this instance of geometry.\n\n// These are the interpolated values out of the rasterizer, so you can't know\n// their specific values without knowing the vertices that contributed to them\nin vec4 fs_Nor;\nin vec4 fs_LightVec;\nin vec4 fs_Col;\n\nout vec4 out_Col; // This is the final output color that you will see on your\n                  // screen for the pixel that is currently being processed.\n\nvoid main()\n{\n    // Material base color (before shading)\n        vec4 diffuseColor = fs_Col;\n\n        // Calculate the diffuse term for Lambert shading\n        float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));\n        // Avoid negative lighting values\n        diffuseTerm = abs(diffuseTerm);\n        diffuseTerm = clamp(diffuseTerm, 0.f, 1.f);\n\n        float ambientTerm = 0.55;\n\n        float lightIntensity = diffuseTerm + ambientTerm;   //Add a small float value to the color multiplier\n                                                            //to simulate ambient lighting. This ensures that faces that are not\n                                                            //lit by our point light are not completely black.\n        vec4 lightColor = vec4(1,0,0,0);\n\n        // Compute final shaded color\n        out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);// + lightColor * lightIntensity;\n}\n"
 
 /***/ }),
 /* 89 */

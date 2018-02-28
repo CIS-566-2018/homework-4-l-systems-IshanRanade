@@ -65,7 +65,14 @@ class Rock extends Drawable {
 
       tempNormals.push(tempNormal[0], tempNormal[1], tempNormal[2], 0);
       tempPositions.push(tempPosition[0], tempPosition[1], tempPosition[2], 1);
-      tempColors.push(this.color[0], this.color[1], this.color[2], this.color[3]);
+      
+
+      if(this.objName == "rock")  {
+        tempColors.push(51/255.0, 51/255.0, 77/255.0, this.color[3]);
+
+      } else {
+        tempColors.push(this.color[0], this.color[1], this.color[2], this.color[3]);
+      }
     }
 
     this.indices = new Uint32Array(tempIndices);

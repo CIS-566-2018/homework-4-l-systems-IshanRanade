@@ -143,7 +143,7 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  let cameraPos: vec3 = vec3.fromValues(0, 25, -200);
+  let cameraPos: vec3 = vec3.fromValues(0, 25, -275);
   vec3.rotateY(cameraPos, cameraPos, vec3.fromValues(0,0,0), 290 * Math.PI / 180.0);
   const camera = new Camera(cameraPos, vec3.fromValues(0, 35, 0));
 
