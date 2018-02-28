@@ -16,13 +16,13 @@ class Square extends Drawable {
 
   create() {
 
-    let topLeft: vec3     = vec3.fromValues(204, 245, 255);
+    let topLeft: vec3     = vec3.fromValues(196, 77, 255);
     vec3.scale(topLeft, topLeft, 1/255.0);
-    let topRight: vec3    = vec3.fromValues(204, 245, 255);
+    let topRight: vec3    = vec3.fromValues(196, 77, 255);
     vec3.scale(topRight, topRight, 1/255.0);
-    let bottomLeft: vec3  = vec3.fromValues(255, 179, 179);
+    let bottomLeft: vec3  = vec3.fromValues(255, 117, 26);
     vec3.scale(bottomLeft, bottomLeft, 1/255.0);
-    let bottomRight: vec3 = vec3.fromValues(255, 179, 179);
+    let bottomRight: vec3 = vec3.fromValues(255, 117, 26);
     vec3.scale(bottomRight, bottomRight, 1/255.0);
 
     this.indices = new Uint32Array([0, 1, 2,
