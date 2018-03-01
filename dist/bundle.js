@@ -15581,16 +15581,12 @@ class Plant {
                         coordinates: [turtle.position[0], turtle.position[1], turtle.position[2]]
                     };
                     var nearest = this.nearestTree.nearest(flowerCoord, 1, 5.0);
-                    //console.log(nearest);
                     if (nearest.length == 0 || !this.collisionCheck) {
                         this.translationsLeaf.push(turtle.position[0], turtle.position[1], turtle.position[2], 0);
                         this.quaternionsLeaf.push(turtle.quaternion[0], turtle.quaternion[1], turtle.quaternion[2], turtle.quaternion[3]);
                         this.scalesLeaf.push(0.5, 0.5, 0.5, 1);
                         this.leafInstanceCount += 1;
                         this.nearestTree.insert(flowerCoord);
-                    }
-                    else {
-                        console.log(nearest[0][1]);
                     }
                 }
             }
