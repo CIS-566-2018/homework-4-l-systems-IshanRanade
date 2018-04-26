@@ -38,17 +38,47 @@ out vec4 fs_Col;            // The color of each vertex. This is implicitly pass
 const vec4 lightPos = vec4(500, 500, -300, 1); //The position of our virtual light, which is used to compute the shading of
                                         //the geometry in the fragment shader.
 
+mat4 matrixFromQuaternion(vec4 q) {
+  float qx = q[0];
+  float qy = q[1];
+  float qz = q[2];
+  float qw = q[3];
+
+  return transpose(mat4(1.0f - 2.0f*qy*qy - 2.0f*qz*qz, 2.0f*qx*qy - 2.0f*qz*qw, 2.0f*qx*qz + 2.0f*qy*qw, 0.0f,
+    2.0f*qx*qy + 2.0f*qz*qw, 1.0f - 2.0f*qx*qx - 2.0f*qz*qz, 2.0f*qy*qz - 2.0f*qx*qw, 0.0f,
+    2.0f*qx*qz - 2.0f*qy*qw, 2.0f*qy*qz + 2.0f*qx*qw, 1.0f - 2.0f*qx*qx - 2.0f*qy*qy, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f));
+}
+
+mat4 matrixFromTranslation(vec4 t) {
+  return mat4(
+    1.0,0.0,0.0,0.0,
+    0.0,1.0,0.0,0.0,
+    0.0,0.0,1.0,0.0,
+    t.x,t.y,t.z,1.0); 
+}
+
+mat4 getMatrixFromScale(vec3 s) {
+  return mat4(
+    s.x,0.0,0.0,0.0,
+    0.0,s.y,0.0,0.0,
+    0.0,0.0,s.z,0.0,
+    0.0,0.0,0.0,1.0
+  );
+}
+
 void main()
 {
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
 
     mat3 invTranspose = mat3(u_ModelInvTr);
-    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);          // Pass the vertex normals to the fragment shader for interpolation.
+    //fs_Nor = vec4(invTranspose * vec3(normalize(vs_Nor)), 0);          // Pass the vertex normals to the fragment shader for interpolation.
                                                             // Transform the geometry's normals by the inverse transpose of the
                                                             // model matrix. This is necessary to ensure the normals remain
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
 
+    fs_Nor = normalize(vec4(mat3(transpose(inverse(u_Model * matrixFromTranslation(vs_Translation) * matrixFromQuaternion(vs_Quaternion) * getMatrixFromScale(vs_Scale)))) * vec3(vs_Nor), 0.0));
 
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
 
